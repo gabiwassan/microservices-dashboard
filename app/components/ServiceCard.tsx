@@ -10,7 +10,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
   const isRunning = service.status === 'running';
   
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl overflow-hidden">
+    <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl overflow-hidden">
       <div className="p-4">
         <div className="flex justify-between items-start">
           <div>

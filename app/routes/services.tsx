@@ -1,5 +1,5 @@
 import { redirect, ActionFunction, LoaderFunction } from "@remix-run/node";
-import { useLoaderData, useActionData, Form } from "@remix-run/react";
+import { useActionData, Form } from "@remix-run/react";
 import {
   getAllServices,
   startServiceById,
@@ -7,9 +7,6 @@ import {
   addService,
   removeService,
 } from "~/utils/service-manager.server";
-import ServiceList from "~/components/ServiceList";
-import { MicroService } from "~/utils/types";
-import { useState } from "react";
 
 export const loader: LoaderFunction = async () => {
   const services = await getAllServices();
@@ -57,124 +54,98 @@ export const action: ActionFunction = async ({
 };
 
 export default function Services() {
-  const { services } = useLoaderData<{ services: MicroService[] }>();
   const actionData = useActionData<ActionData>();
-  
-  // Estado para controlar el acordeón
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleAccordion = () => {
-    setIsOpen(!isOpen);
-  };
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 min-h-screen">
+    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Our Services
-        </h2>
-
-        {/* Acordeón para agregar nuevos servicios */}
         <div className="bg-white dark:bg-gray-700 shadow rounded-lg">
-          <button
-            onClick={toggleAccordion}
-            className="w-full text-left p-4 text-lg font-medium text-gray-900 dark:text-gray-100"
-          >
-            {isOpen ? "−" : "+"} Add New Service
-          </button>
-          {isOpen && (
-            <div className="p-6">
-              {actionData?.error && (
-                <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-md">
-                  {actionData.error}
-                </div>
-              )}
+          <div className="p-6">
+            {actionData?.error && (
+              <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-md">
+                {actionData.error}
+              </div>
+            )}
 
-              <Form method="post" className="space-y-4">
-                <input type="hidden" name="action" value="add" />
+            <Form method="post" className="space-y-4">
+              <input type="hidden" name="action" value="add" />
 
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    className="mt-1 block w-full h-6 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required
-                  />
-                </div>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  className="mt-1 block w-full h-6 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
+                />
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    id="description"
-                    rows={3}
-                    className="mt-1 block w-full h-6 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  ></textarea>
-                </div>
+              <div>
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  id="description"
+                  rows={3}
+                  className="mt-1 block w-full h-6 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                ></textarea>
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="port"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Port
-                  </label>
-                  <input
-                    type="number"
-                    name="port"
-                    id="port"
-                    className="mt-1 block w-full h-6 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required
-                  />
-                </div>
+              <div>
+                <label
+                  htmlFor="port"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Port
+                </label>
+                <input
+                  type="number"
+                  name="port"
+                  id="port"
+                  className="mt-1 block w-full h-6 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
+                />
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="path"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Path
-                  </label>
-                  <input
-                    type="text"
-                    name="path"
-                    id="path"
-                    className="mt-1 block w-full h-6 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder="absolute/path/to/service"
-                    required
-                  />
-                </div>
+              <div>
+                <label
+                  htmlFor="path"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Path
+                </label>
+                <input
+                  type="text"
+                  name="path"
+                  id="path"
+                  className="mt-1 block w-full h-6 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  placeholder="absolute/path/to/service"
+                  required
+                />
+              </div>
 
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-                  >
-                    Add Service
-                  </button>
-                </div>
-              </Form>
-            </div>
-          )}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                >
+                  Add Service
+                </button>
+              </div>
+            </Form>
+          </div>
         </div>
       </div>
-
-      <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-        Configured Services
-      </h3>
-      <ServiceList services={services} />
 
       <div className="mt-6">
         <a
