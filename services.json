@@ -1,0 +1,137 @@
+[
+  {
+    "name": "tms-bff-service",
+    "description": "TMS BFF Service for frontend integration",
+    "port": 3033,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/tms-bff-service",
+    "id": "15107095-a417-44f9-9fa9-29cdf839b9bd",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "customer-service",
+    "description": "Customer Management Service",
+    "port": 3034,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/customer-service",
+    "id": "25107095-b417-44f9-9fa9-29cdf839b9be",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "contact-service",
+    "description": "Contact Management Service",
+    "port": 3032,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/contact-service",
+    "id": "35107095-c417-44f9-9fa9-29cdf839b9bf",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "dispatch-service",
+    "description": "Dispatch Management Service",
+    "port": 3028,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/dispatch-service",
+    "id": "45107095-d417-44f9-9fa9-29cdf839b9c0",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "event-service",
+    "description": "Event Management Service",
+    "port": 3030,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/event-service",
+    "id": "55107095-e417-44f9-9fa9-29cdf839b9c1",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "rate-service",
+    "description": "Rate Management Service",
+    "port": 3031,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/rate-service",
+    "id": "65107095-f417-44f9-9fa9-29cdf839b9c2",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "carrier-service",
+    "description": "Carrier Management Service",
+    "port": 3027,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/carrier-service",
+    "id": "75107095-g417-44f9-9fa9-29cdf839b9c3",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:28:22.392Z"
+  },
+  {
+    "name": "shipper-service",
+    "description": "Shipper Management Service",
+    "port": 3029,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/shipper-service",
+    "id": "85107095-h417-44f9-9fa9-29cdf839b9c4",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "router-service",
+    "description": "Router Management Service",
+    "port": 3021,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/router-service",
+    "id": "a5107095-j417-44f9-9fa9-29cdf839b9c6",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "receiver-service",
+    "description": "Receiver Management Service",
+    "port": 3022,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/receiver-service",
+    "id": "b5107095-k417-44f9-9fa9-29cdf839b9c7",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "orchestrator-service",
+    "description": "Orchestrator Service",
+    "port": 3025,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/orchestrator-service",
+    "id": "c5107095-l417-44f9-9fa9-29cdf839b9c8",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "notification-service",
+    "description": "Notification Management Service",
+    "port": 3035,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/notification-service",
+    "id": "d5107095-m417-44f9-9fa9-29cdf839b9c9",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "load-service",
+    "description": "Load Management Service",
+    "port": 3026,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/load-service",
+    "id": "e5107095-n417-44f9-9fa9-29cdf839b9ca",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "dispatcher-service",
+    "description": "Dispatcher Management Service",
+    "port": 3024,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/dispatcher-service",
+    "id": "f5107095-o417-44f9-9fa9-29cdf839b9cb",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  },
+  {
+    "name": "configurator-service",
+    "description": "Configurator Management Service",
+    "port": 3023,
+    "path": "/Users/gabi/Documents/repos/seco-logistics/services/configurator-service",
+    "id": "g5107095-p417-44f9-9fa9-29cdf839b9cc",
+    "status": "stopped",
+    "lastStopped": "2025-02-25T22:13:34.736Z"
+  }
+]
