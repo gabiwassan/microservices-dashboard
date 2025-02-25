@@ -14,7 +14,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
       <div className="p-4">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">{service.name}</h3>
+            <h3 className="text-lg font-medium text-gray-900">Service Title</h3>
             <ServiceStatusBadge status={service.status} />
           </div>
           <div className="text-sm text-gray-500">
@@ -22,7 +22,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </div>
         </div>
         
-        <p className="mt-2 text-sm text-gray-600">{service.description}</p>
+        <p className="mt-2 text-sm text-gray-600">Description of the service.</p>
         
         <div className="mt-4">
           {service.lastStarted && (

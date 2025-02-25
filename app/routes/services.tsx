@@ -63,12 +63,12 @@ export default function Services() {
     <div>
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Administrar Servicios
+          Services
         </h2>
 
         <div className="bg-white shadow rounded-lg p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Agregar Nuevo Servicio
+            Add New Service
           </h3>
 
           {actionData?.error && (
@@ -85,7 +85,7 @@ export default function Services() {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Nombre
+                Name
               </label>
               <input
                 type="text"
@@ -101,7 +101,7 @@ export default function Services() {
                 htmlFor="description"
                 className="block text-sm font-medium text-gray-700"
               >
-                Descripción
+                Description
               </label>
               <textarea
                 name="description"
@@ -116,7 +116,7 @@ export default function Services() {
                 htmlFor="port"
                 className="block text-sm font-medium text-gray-700"
               >
-                Puerto
+                Port
               </label>
               <input
                 type="number"
@@ -132,14 +132,14 @@ export default function Services() {
                 htmlFor="path"
                 className="block text-sm font-medium text-gray-700"
               >
-                Ruta del Servicio
+                Path
               </label>
               <input
                 type="text"
                 name="path"
                 id="path"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="/ruta/absoluta/al/microservicio"
+                placeholder="absolute/path/to/service"
                 required
               />
             </div>
@@ -149,7 +149,7 @@ export default function Services() {
                 type="submit"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
               >
-                Agregar Servicio
+                Add Service
               </button>
             </div>
           </Form>
@@ -157,7 +157,7 @@ export default function Services() {
       </div>
 
       <h3 className="text-lg font-medium text-gray-900 mb-4">
-        Servicios Configurados
+        Configured Services
       </h3>
       <ServiceList services={services} />
 
@@ -166,7 +166,7 @@ export default function Services() {
           href="/"
           className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
         >
-          Volver al Dashboard
+          Back to Dashboard
         </a>
       </div>
     </div>
