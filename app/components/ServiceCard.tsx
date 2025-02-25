@@ -10,35 +10,35 @@ export default function ServiceCard({ service }: ServiceCardProps) {
   const isRunning = service.status === 'running';
   
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl overflow-hidden">
       <div className="p-4">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">Service Title</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{service.name}</h3>
             <ServiceStatusBadge status={service.status} />
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
             Puerto: {service.port}
           </div>
         </div>
         
-        <p className="mt-2 text-sm text-gray-600">Description of the service.</p>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{service.description}</p>
         
         <div className="mt-4">
           {service.lastStarted && (
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               Último inicio: {new Date(service.lastStarted).toLocaleString()}
             </p>
           )}
           {service.lastStopped && (
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               Última detención: {new Date(service.lastStopped).toLocaleString()}
             </p>
           )}
         </div>
       </div>
       
-      <div className="bg-gray-50 px-4 py-3 sm:px-6 flex justify-end space-x-2">
+      <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 flex justify-end space-x-2">
         <Form method="post">
           <input type="hidden" name="serviceId" value={service.id} />
           <input type="hidden" name="action" value={isRunning ? 'stop' : 'start'} />
