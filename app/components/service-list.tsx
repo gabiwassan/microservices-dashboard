@@ -1,5 +1,5 @@
 import { MicroService } from '~/utils/types';
-import ServiceCard from './ServiceCard';
+import ServiceCard from './service-card';
 
 interface ServiceListProps {
   services: MicroService[];

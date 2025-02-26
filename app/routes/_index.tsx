@@ -1,7 +1,7 @@
 import type { ActionFunction, LoaderFunction } from "react-router";
 import { redirect } from "react-router";
 import { useLoaderData } from "react-router";
-import ServiceList from "~/components/ServiceList";
+import ServiceList from "~/components/service-list";
 import {
   getAllServices,
   startServiceById,
