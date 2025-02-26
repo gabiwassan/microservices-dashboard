@@ -1,7 +1,8 @@
-import { Link, useNavigation, useSubmit, useRevalidator } from "@remix-run/react";
+import { Link, useNavigation, useSubmit, useRevalidator } from "react-router";
 import { useEffect, useState } from "react";
 import { MicroService } from "~/utils/types";
 import ServiceStatusBadge from "./ServiceStatusBadge";
+import ServiceLogs from "./ServiceLogs";
 
 interface ServiceCardProps {
   service: MicroService;
@@ -14,6 +15,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
   const revalidator = useRevalidator();
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingAction, setProcessingAction] = useState<"start" | "stop" | null>(null);
+  const [showLogs, setShowLogs] = useState(false);
 
   useEffect(() => {
     if (navigation.formData) {
@@ -52,9 +54,14 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     };
   }, [isProcessing, revalidator]);
 
-  const handleAction = (action: "start" | "stop" | "refresh") => {
+  const handleAction = (action: "start" | "stop" | "refresh" | "logs") => {
     if (action === "refresh") {
       revalidator.revalidate();
+      return;
+    }
+
+    if (action === "logs") {
+      setShowLogs(!showLogs);
       return;
     }
 
@@ -127,6 +134,8 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             {`http://localhost:${service.port}`}
           </Link>
         </div>
+
+        <ServiceLogs serviceId={service.id} isVisible={showLogs} />
       </div>
 
       <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 flex justify-end space-x-2">
@@ -149,11 +158,22 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         </button>
 
         <button
+          onClick={() => handleAction("logs")}
+          className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded ${
+            showLogs
+              ? "bg-purple-200 text-purple-700 hover:bg-purple-300"
+              : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+          }`}
+        >
+          {showLogs ? "Hide Logs 📝" : "Show Logs 📝"}
+        </button>
+
+        <button
           onClick={() => handleAction("refresh")}
           disabled={isProcessing}
           className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded bg-blue-100 text-blue-700 hover:bg-blue-200 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
         >
-          Refresh
+          Refresh 🔄
         </button>
       </div>
     </div>

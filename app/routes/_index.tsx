@@ -1,6 +1,6 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import type { ActionFunction, LoaderFunction } from "react-router";
+import { redirect } from "react-router";
+import { useLoaderData } from "react-router";
 import ServiceList from "~/components/ServiceList";
 import {
   getAllServices,

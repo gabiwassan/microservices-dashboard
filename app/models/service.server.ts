@@ -1,4 +1,4 @@
-import { exec, ExecOptions } from "child_process";
+import { exec, ExecOptions, spawn } from "child_process";
 import path from "path";
 import fs from "fs";
 import { MicroService, ServiceStatus } from "~/utils/types";
@@ -6,6 +6,17 @@ import { MicroService, ServiceStatus } from "~/utils/types";
 const SERVICES_CONFIG_PATH = path.join(process.cwd(), "services.json");
 const MAX_RETRIES = 10;
 const RETRY_INTERVAL = 1000;
+
+function ensureLogDirectory(servicePath: string): string {
+  const logDir = path.join(servicePath, "logs");
+  const logFile = path.join(logDir, "service.log");
+  
+  if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir, { recursive: true });
+  }
+  
+  return logFile;
+}
 
 export async function loadServices(): Promise<MicroService[]> {
   if (!fs.existsSync(SERVICES_CONFIG_PATH)) {
@@ -73,32 +84,55 @@ export async function startService(service: MicroService): Promise<boolean> {
     });
 
     const initializeService = () => {
+      const logFile = ensureLogDirectory(service.path);
+      const logStream = fs.createWriteStream(logFile, { flags: "a" });
+      
       const options: ExecOptions = {
         windowsHide: true,
         cwd: service.path
       };
 
-      const child = exec(
-        `yarn start`,
-        options,
-        (error: Error | null) => {
-          if (error) {
-            console.error(`Failed to start service ${service.name}:`, error);
-            resolve(false);
-            return;
-          }
-        }
+      const timestamp = () => new Date().toISOString();
+      logStream.write(`\n[${timestamp()}] Starting service ${service.name}...\n`);
+
+      const child = spawn(
+        "yarn",
+        ["start"],
+        options
       );
 
-      if (child.stdout) child.stdout.pipe(process.stdout);
-      if (child.stderr) child.stderr.pipe(process.stderr);
-      
+      child.stdout.on("data", (data) => {
+        const lines = data.toString().split("\n");
+        lines.forEach((line: string) => {
+          if (line.trim()) {
+            logStream.write(`[${timestamp()}] ${line}\n`);
+          }
+        });
+      });
+
+      child.stderr.on("data", (data) => {
+        const lines = data.toString().split("\n");
+        lines.forEach((line: string) => {
+          if (line.trim()) {
+            logStream.write(`[${timestamp()}] ERROR: ${line}\n`);
+          }
+        });
+      });
+
+      child.on("error", (error) => {
+        logStream.write(`[${timestamp()}] Failed to start service: ${error.message}\n`);
+        console.error(`Failed to start service ${service.name}:`, error);
+        resolve(false);
+      });
+
       waitForServiceReady(service).then((isReady) => {
         if (!isReady) {
+          logStream.write(`[${timestamp()}] Service failed to start within expected time\n`);
           console.error(`Service ${service.name} failed to start within expected time`);
           resolve(false);
           return;
         }
+        logStream.write(`[${timestamp()}] Service started successfully\n`);
         resolve(true);
       });
     };
@@ -115,8 +149,15 @@ export async function startService(service: MicroService): Promise<boolean> {
 
 export async function stopService(service: MicroService): Promise<boolean> {
   return new Promise((resolve) => {
+    const logFile = ensureLogDirectory(service.path);
+    const logStream = fs.createWriteStream(logFile, { flags: "a" });
+    const timestamp = () => new Date().toISOString();
+
+    logStream.write(`\n[${timestamp()}] Stopping service ${service.name}...\n`);
+
     exec(`lsof -i:${service.port} -t | xargs kill -9`, (error) => {
       if (error) {
+        logStream.write(`[${timestamp()}] Failed to stop service: ${error.message}\n`);
         console.error(`Failed to stop service ${service.name}:`, error);
         resolve(false);
         return;
@@ -127,12 +168,14 @@ export async function stopService(service: MicroService): Promise<boolean> {
         const check = () => {
           checkServiceStatus(service).then(status => {
             if (status === "stopped") {
+              logStream.write(`[${timestamp()}] Service stopped successfully\n`);
               resolve(true);
               return;
             }
             
             retries++;
             if (retries >= MAX_RETRIES) {
+              logStream.write(`[${timestamp()}] Service did not stop within expected time\n`);
               console.error(`Service ${service.name} did not stop within expected time`);
               resolve(false);
               return;
