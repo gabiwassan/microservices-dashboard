@@ -4,12 +4,18 @@ import {
   getAllServices,
   addService,
   removeService,
+  startServiceById,
+  stopServiceById,
 } from "~/utils/service-manager.server";
 import { ActionData } from "~/utils/types";
 
 export const loader: LoaderFunction = async () => {
   const services = await getAllServices();
-  return { services };
+  return new Response(JSON.stringify({ services }), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 export const action: ActionFunction = async ({
@@ -37,6 +43,12 @@ export const action: ActionFunction = async ({
   } else if (action === "remove") {
     const serviceId = formData.get("serviceId") as string;
     await removeService(serviceId);
+  } else if (action === "start") {
+    const serviceId = formData.get("serviceId") as string;
+    await startServiceById(serviceId);
+  } else if (action === "stop") {
+    const serviceId = formData.get("serviceId") as string;
+    await stopServiceById(serviceId);
   }
 
   return redirect("/services");

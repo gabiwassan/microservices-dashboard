@@ -10,7 +10,6 @@ import {
   export async function getAllServices() {
     const services = await loadServices();
     
-    // Verificar el estado actual de cada servicio
     const servicesWithStatus = await Promise.all(
       services.map(async (service) => {
         const status = await checkServiceStatus(service);
@@ -93,10 +92,8 @@ import {
       return false;
     }
     
-    // Detener el servicio antes de eliminarlo
     await stopService(services[serviceIndex]);
     
-    // Eliminar el servicio de la lista
     services.splice(serviceIndex, 1);
     await saveServices(services);
     

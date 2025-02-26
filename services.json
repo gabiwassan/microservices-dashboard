@@ -6,7 +6,7 @@
     "path": "/Users/gabi/Documents/repos/seco-logistics/services/tms-bff-service",
     "id": "15107095-a417-44f9-9fa9-29cdf839b9bd",
     "status": "stopped",
-    "lastStopped": "2025-02-26T00:00:03.225Z"
+    "lastStopped": "2025-02-26T00:20:20.089Z"
   },
   {
     "name": "customer-service",
@@ -15,7 +15,7 @@
     "path": "/Users/gabi/Documents/repos/seco-logistics/services/customer-service",
     "id": "25107095-b417-44f9-9fa9-29cdf839b9be",
     "status": "stopped",
-    "lastStopped": "2025-02-25T22:13:34.736Z"
+    "lastStopped": "2025-02-26T00:19:34.324Z"
   },
   {
     "name": "contact-service",
@@ -24,7 +24,7 @@
     "path": "/Users/gabi/Documents/repos/seco-logistics/services/contact-service",
     "id": "35107095-c417-44f9-9fa9-29cdf839b9bf",
     "status": "stopped",
-    "lastStopped": "2025-02-25T22:13:34.736Z"
+    "lastStopped": "2025-02-26T00:09:34.832Z"
   },
   {
     "name": "dispatch-service",

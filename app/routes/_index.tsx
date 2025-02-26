@@ -1,13 +1,14 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { redirect, useLoaderData } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import ServiceList from "~/components/ServiceList";
 import {
   getAllServices,
   startServiceById,
   stopServiceById,
+  getServiceById,
 } from "~/utils/service-manager.server";
 import { ActionData, MicroService } from "~/utils/types";
-
 
 export const loader: LoaderFunction = async () => {
   const services = await getAllServices();
@@ -26,6 +27,10 @@ export const action: ActionFunction = async ({
   } else if (action === "stop") {
     const serviceId = formData.get("serviceId") as string;
     await stopServiceById(serviceId);
+  } else if (action === "refresh") {
+    const serviceId = formData.get("serviceId") as string;
+    const service = await getServiceById(serviceId);
+    console.log("Service refreshed:", service);
   }
 
   return redirect("/");
@@ -36,6 +41,9 @@ export default function Index() {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        Available Services
+      </h1>
       <ServiceList services={services} />
       <div className="mt-6">
         <a

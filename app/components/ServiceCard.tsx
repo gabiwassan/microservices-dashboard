@@ -18,7 +18,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             <ServiceStatusBadge status={service.status} />
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Puerto: {service.port}
+            Port: {service.port}
           </div>
         </div>
         
@@ -27,12 +27,12 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         <div className="mt-4">
           {service.lastStarted && (
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Último inicio: {new Date(service.lastStarted).toLocaleString()}
+              Last started: {new Date(service.lastStarted).toLocaleString()}
             </p>
           )}
           {service.lastStopped && (
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Última detención: {new Date(service.lastStopped).toLocaleString()}
+              Last stopped: {new Date(service.lastStopped).toLocaleString()}
             </p>
           )}
         </div>
@@ -51,6 +51,17 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             }`}
           >
             {isRunning ? 'Stop' : 'Start'}
+          </button>
+        </Form>
+        
+        <Form method="post">
+          <input type="hidden" name="serviceId" value={service.id} />
+          <input type="hidden" name="action" value="refresh" />
+          <button
+            type="submit"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
+          >
+            Refresh
           </button>
         </Form>
       </div>
