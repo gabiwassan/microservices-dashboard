@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from "react";
 
 interface ServiceLogsProps {
   serviceId: string;
+  serviceName: string;
   isVisible: boolean;
   onClose: () => void;
 }
 
-export default function ServiceLogs({ serviceId, isVisible, onClose }: ServiceLogsProps) {
+export default function ServiceLogs({ serviceId, serviceName, isVisible, onClose }: ServiceLogsProps) {
   const [logs, setLogs] = useState<string[]>([]);
   const logsContainerRef = useRef<HTMLDivElement>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -73,7 +74,10 @@ export default function ServiceLogs({ serviceId, isVisible, onClose }: ServiceLo
       <div className="bg-gray-900 w-full h-full max-w-[95vw] max-h-[95vh] rounded-lg flex flex-col overflow-hidden">
         <div className="bg-gray-800 px-6 py-4 flex justify-between items-center border-b border-gray-700">
           <div className="flex items-center space-x-4">
-            <h2 className="text-xl font-semibold text-white"> {serviceId} Logs</h2>
+            <h2 className="text-xl font-semibold text-white flex items-center space-x-2">
+              <span className="text-purple-400">{serviceName}</span>
+              <span className="text-gray-400">Logs</span>
+            </h2>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               <span className="text-sm text-gray-400">

@@ -1,6 +1,6 @@
 import { Link, useNavigation, useSubmit, useRevalidator } from "react-router";
 import { useEffect, useState } from "react";
-import { MicroService } from "~/utils/types";
+import { MicroService } from "../utils/types";
 import ServiceStatusBadge from "./service-status-badge";
 import ServiceLogs from "./service-logs";
 
@@ -137,6 +137,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
         <ServiceLogs 
           serviceId={service.id} 
+          serviceName={service.name}
           isVisible={showLogs} 
           onClose={() => setShowLogs(false)} 
         />
