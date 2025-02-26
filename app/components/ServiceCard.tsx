@@ -50,7 +50,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                 : 'bg-green-100 text-green-700 hover:bg-green-200'
             }`}
           >
-            {isRunning ? 'Detener' : 'Iniciar'}
+            {isRunning ? 'Stop' : 'Start'}
           </button>
         </Form>
       </div>

@@ -1,13 +1,34 @@
-import type { LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { redirect, useLoaderData } from "@remix-run/react";
 import ServiceList from "~/components/ServiceList";
-import { getAllServices } from "~/utils/service-manager.server";
-import { MicroService } from "~/utils/types";
+import {
+  getAllServices,
+  startServiceById,
+  stopServiceById,
+} from "~/utils/service-manager.server";
+import { ActionData, MicroService } from "~/utils/types";
+
 
 export const loader: LoaderFunction = async () => {
-  // Aquí puedes obtener los servicios desde tu API o base de datos
-  const services = await getAllServices(); // Asegúrate de tener esta función
+  const services = await getAllServices();
   return { services };
+};
+
+export const action: ActionFunction = async ({
+  request,
+}): Promise<ActionData | Response> => {
+  const formData = await request.formData();
+  const action = formData.get("action") as string;
+
+  if (action === "start") {
+    const serviceId = formData.get("serviceId") as string;
+    await startServiceById(serviceId);
+  } else if (action === "stop") {
+    const serviceId = formData.get("serviceId") as string;
+    await stopServiceById(serviceId);
+  }
+
+  return redirect("/");
 };
 
 export default function Index() {

@@ -2,20 +2,15 @@ import { redirect, ActionFunction, LoaderFunction } from "@remix-run/node";
 import { useActionData, Form } from "@remix-run/react";
 import {
   getAllServices,
-  startServiceById,
-  stopServiceById,
   addService,
   removeService,
 } from "~/utils/service-manager.server";
+import { ActionData } from "~/utils/types";
 
 export const loader: LoaderFunction = async () => {
   const services = await getAllServices();
   return { services };
 };
-
-interface ActionData {
-  error?: string;
-}
 
 export const action: ActionFunction = async ({
   request,
@@ -23,13 +18,7 @@ export const action: ActionFunction = async ({
   const formData = await request.formData();
   const action = formData.get("action") as string;
 
-  if (action === "start") {
-    const serviceId = formData.get("serviceId") as string;
-    await startServiceById(serviceId);
-  } else if (action === "stop") {
-    const serviceId = formData.get("serviceId") as string;
-    await stopServiceById(serviceId);
-  } else if (action === "add") {
+  if (action === "add") {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const port = parseInt(formData.get("port") as string, 10);

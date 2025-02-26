@@ -10,3 +10,7 @@ export interface MicroService {
   lastStarted?: Date;
   lastStopped?: Date;
 }
+
+export interface ActionData {
+  error?: string;
+}
