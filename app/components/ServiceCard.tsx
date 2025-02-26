@@ -135,7 +135,11 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </Link>
         </div>
 
-        <ServiceLogs serviceId={service.id} isVisible={showLogs} />
+        <ServiceLogs 
+          serviceId={service.id} 
+          isVisible={showLogs} 
+          onClose={() => setShowLogs(false)} 
+        />
       </div>
 
       <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 flex justify-end space-x-2">
