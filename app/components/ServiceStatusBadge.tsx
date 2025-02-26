@@ -21,13 +21,14 @@ export default function ServiceStatusBadge({ status }: ServiceStatusBadgeProps) 
   const getStatusText = () => {
     switch (status) {
       case 'running':
-        return 'Ejecutando';
+        // add emoji running guy
+        return 'Running 🚀';
       case 'stopped':
-        return 'Detenido';
+        return 'Stopped 💀';
       case 'error':
-        return 'Error';
+        return 'Error 🔴';
       default:
-        return 'Desconocido';
+        return 'Unknown';
     }
   };
 
