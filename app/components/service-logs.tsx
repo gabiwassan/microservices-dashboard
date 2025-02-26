@@ -28,7 +28,7 @@ export default function ServiceLogs({ serviceId, isVisible, onClose }: ServiceLo
         const logData = JSON.parse(event.data);
         setLogs(prev => {
           const newLogs = [...prev, logData.message];
-          return newLogs.slice(-500); // Aumentamos a 500 líneas para el modal
+          return newLogs.slice(-500);
         });
       } catch (e) {
         console.error("Error parsing log data:", e);
@@ -55,7 +55,6 @@ export default function ServiceLogs({ serviceId, isVisible, onClose }: ServiceLo
       }
     }
 
-    // Prevenir scroll en el body cuando el modal está abierto
     if (isVisible) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -74,7 +73,7 @@ export default function ServiceLogs({ serviceId, isVisible, onClose }: ServiceLo
       <div className="bg-gray-900 w-full h-full max-w-[95vw] max-h-[95vh] rounded-lg flex flex-col overflow-hidden">
         <div className="bg-gray-800 px-6 py-4 flex justify-between items-center border-b border-gray-700">
           <div className="flex items-center space-x-4">
-            <h2 className="text-xl font-semibold text-white">Service Logs</h2>
+            <h2 className="text-xl font-semibold text-white"> {serviceId} Logs</h2>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               <span className="text-sm text-gray-400">
