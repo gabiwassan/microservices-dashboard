@@ -14,7 +14,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!service) {
     return new Response("Service not found", { status: 404 });
   }
-
+  
+  
+  // https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream 
+  // Aca esta el tema... 
+  // 🤓
+  // 🤔
+  // 🤯
+  // 🤗
+  // 🤡
+  // 🤖
+  // 🤗
   const stream = new ReadableStream({
     start(controller) {
       const tail = spawn("tail", ["-f", `${service.path}/logs/service.log`]);
