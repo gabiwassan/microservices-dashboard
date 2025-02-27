@@ -25,8 +25,6 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Este valor inicial solo se usa en el servidor
-    // El cliente usará el valor determinado por el script inline
     return false;
   });
 
@@ -34,7 +32,6 @@ export default function App() {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const stored = localStorage.getItem('theme');
 
-    // Sincronizar el estado con el tema actual del DOM
     setIsDarkMode(document.documentElement.classList.contains('dark'));
 
     const handleChange = (e: MediaQueryListEvent) => {
@@ -68,7 +65,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <header className="mb-8 flex justify-between items-center">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Status Services
+              Dashboard Services
             </h1>
             <button 
               onClick={toggleTheme} 
@@ -78,9 +75,8 @@ export default function App() {
                 focus:outline-none focus:ring-2 focus:ring-purple-500/50
                 transition-all duration-500 ease-out
                 group relative flex items-center justify-center w-10 h-10"
-              aria-label={isDarkMode ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
-              {/* Sol */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

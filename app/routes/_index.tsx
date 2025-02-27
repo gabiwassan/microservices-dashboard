@@ -40,9 +40,6 @@ export default function Index() {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-        Available Services
-      </h1>
       <ServiceList services={services} />
       <div className="mt-6">
         <a

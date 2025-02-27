@@ -16,7 +16,7 @@
     "id": "25107095-b417-44f9-9fa9-29cdf839b9be",
     "status": "running",
     "lastStopped": "2025-02-26T23:53:52.652Z",
-    "lastStarted": "2025-02-26T23:58:05.305Z"
+    "lastStarted": "2025-02-27T00:10:44.571Z"
   },
   {
     "name": "contact-service",
@@ -54,9 +54,9 @@
     "port": 3031,
     "path": "/Users/gabi/Documents/repos/seco-logistics/services/rate-service",
     "id": "65107095-f417-44f9-9fa9-29cdf839b9c2",
-    "status": "stopped",
-    "lastStopped": "2025-02-26T23:11:50.019Z",
-    "lastStarted": "2025-02-26T23:04:17.891Z"
+    "status": "running",
+    "lastStopped": "2025-02-27T00:17:36.743Z",
+    "lastStarted": "2025-02-27T00:17:41.841Z"
   },
   {
     "name": "carrier-service",
