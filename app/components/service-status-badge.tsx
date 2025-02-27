@@ -1,4 +1,4 @@
-import { ServiceStatus } from '~/utils/types';
+import { ServiceStatus } from '../utils/types';
 
 interface ServiceStatusBadgeProps {
   status: ServiceStatus;
@@ -21,12 +21,11 @@ export default function ServiceStatusBadge({ status }: ServiceStatusBadgeProps) 
   const getStatusText = () => {
     switch (status) {
       case 'running':
-        // add emoji running guy
-        return 'Running 🚀';
+        return 'Running';
       case 'stopped':
-        return 'Stopped 💀';
+        return 'Stopped';
       case 'error':
-        return 'Error 🔴';
+        return 'Error';
       default:
         return 'Unknown';
     }
