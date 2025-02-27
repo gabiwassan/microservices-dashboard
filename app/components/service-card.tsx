@@ -222,6 +222,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         serviceName={service.name}
         isVisible={showLogs}
         onClose={() => setShowLogs(false)}
+        status={service.status}
       />
     </div>
   );

@@ -2,6 +2,41 @@ import { LoaderFunction } from "react-router";
 import { spawn } from "child_process";
 import { getServiceById } from "../utils/service-manager.server";
 
+type LogLevel = "error" | "warn" | "info" | "debug" | "verbose";
+
+interface LogMessage {
+  message: string;
+  level: LogLevel;
+  timestamp: string;
+}
+
+function detectLogLevel(line: string): LogLevel {
+  const lowerLine = line.toLowerCase();
+  
+  if (lowerLine.includes("[error]") || 
+      lowerLine.includes("error:") || 
+      lowerLine.includes("uncaughtexception") ||
+      lowerLine.includes("unhandledrejection")) {
+    return "error";
+  }
+  
+  if (lowerLine.includes("[warn]") || 
+      lowerLine.includes("warning:") ||
+      lowerLine.includes("deprecated")) {
+    return "warn";
+  }
+  
+  if (lowerLine.includes("[debug]")) {
+    return "debug";
+  }
+  
+  if (lowerLine.includes("[verbose]")) {
+    return "verbose";
+  }
+  
+  return "info";
+}
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const serviceId = params.serviceId;
 
@@ -30,8 +65,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const tail = spawn("tail", ["-f", `${service.path}/logs/service.log`]);
       let buffer = "";
 
-      const send = (data: string) => {
-        controller.enqueue(`data: ${JSON.stringify({ message: data })}\n\n`);
+      const send = (line: string) => {
+        const level = detectLogLevel(line);
+        const logMessage: LogMessage = {
+          message: line,
+          level,
+          timestamp: new Date().toISOString()
+        };
+        controller.enqueue(`data: ${JSON.stringify(logMessage)}\n\n`);
       };
 
       tail.stdout.on("data", (data) => {
@@ -47,7 +88,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       });
 
       tail.stderr.on("data", (data) => {
-        send(`Error: ${data.toString()}`);
+        const logMessage: LogMessage = {
+          message: `Error: ${data.toString()}`,
+          level: "error",
+          timestamp: new Date().toISOString()
+        };
+        controller.enqueue(`data: ${JSON.stringify(logMessage)}\n\n`);
       });
 
       request.signal.addEventListener("abort", () => {

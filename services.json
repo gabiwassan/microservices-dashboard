@@ -14,9 +14,9 @@
     "port": 3034,
     "path": "/Users/gabi/Documents/repos/seco-logistics/services/customer-service",
     "id": "25107095-b417-44f9-9fa9-29cdf839b9be",
-    "status": "stopped",
-    "lastStopped": "2025-02-27T00:28:15.973Z",
-    "lastStarted": "2025-02-27T00:27:46.021Z"
+    "status": "running",
+    "lastStopped": "2025-02-27T11:31:31.989Z",
+    "lastStarted": "2025-02-27T11:39:35.606Z"
   },
   {
     "name": "contact-service",
