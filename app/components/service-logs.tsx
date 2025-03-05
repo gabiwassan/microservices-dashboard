@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useServiceLogs, LOG_LIMIT_OPTIONS, type LogEntry, type LogLimit } from "../hooks/use-service-logs";
 import type { ServiceStatus } from "../utils/types";
 
@@ -30,7 +30,15 @@ export default function ServiceLogs({
 
   const logsContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = () => {
+  useEffect(() => {
+    if (autoScroll && logsContainerRef.current && logs.length > 0) {
+      logsContainerRef.current.scrollTop = logsContainerRef.current.scrollHeight;
+    }
+  }, [logs, autoScroll]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    
     if (logsContainerRef.current) {
       const container = logsContainerRef.current;
       const isNearBottom =
@@ -163,7 +171,8 @@ export default function ServiceLogs({
         <div
           ref={logsContainerRef}
           onScroll={handleScroll}
-          className="flex-1 overflow-y-auto p-6 font-mono text-sm"
+          className="flex-1 overflow-y-auto p-6 font-mono text-sm overscroll-contain"
+          onWheel={(e) => e.stopPropagation()}
         >
           {logs.length === 0 ? (
             <div className="text-gray-500 flex items-center justify-center h-full text-lg">
