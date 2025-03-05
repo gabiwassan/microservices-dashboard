@@ -139,10 +139,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
               text-xs font-medium rounded-lg border whitespace-nowrap
               transition-all duration-200
               ${isProcessing 
-                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed dark:bg-gray-800 dark:border-gray-700' 
+                ? 'bg-gray-100 text-gray-600 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600/80 dark:hover:text-gray-200' 
                 : isRunning
-                  ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100 dark:bg-red-500/10 dark:border-red-500/20 dark:hover:bg-red-500/20'
-                  : 'bg-green-50 text-green-600 border-green-100 hover:bg-green-100 dark:bg-green-500/10 dark:border-green-500/20 dark:hover:bg-green-500/20'
+                  ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100 hover:text-red-600 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/30 dark:hover:border-red-500/30 dark:hover:text-red-400'
+                  : 'bg-green-50 text-green-600 border-green-100 hover:bg-green-100 hover:text-green-600 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 dark:hover:bg-green-500/30 dark:hover:border-green-500/30 dark:hover:text-green-400'
               }
             `}
           >
@@ -183,8 +183,8 @@ export default function ServiceCard({ service }: ServiceCardProps) {
               text-xs font-medium rounded-lg border whitespace-nowrap
               transition-all duration-200
               ${showLogs
-                ? 'bg-purple-50 text-purple-600 border-purple-100 hover:bg-purple-100 dark:bg-purple-500/10 dark:border-purple-500/20 dark:hover:bg-purple-500/20'
-                : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600'
+                ? 'bg-purple-50 text-purple-600 border-purple-100 hover:bg-purple-100 hover:text-purple-600 dark:bg-purple-500/10 dark:text-purple-400 dark:border-purple-500/20 dark:hover:bg-purple-500/30 dark:hover:border-purple-500/30 dark:hover:text-purple-400'
+                : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 hover:text-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600/80 dark:hover:text-gray-200'
               }
             `}
           >
