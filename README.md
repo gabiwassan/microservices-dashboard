@@ -1,139 +1,92 @@
-# 🎮 Microservices Dashboard - Your Mission Control Center
+# Microservices Dashboard
 
-> "In the beginning there was chaos... and way too many terminal windows" - A Developer's Tale
+A modern dashboard to manage and monitor your microservices.
 
-## 🌟 Features
-- 🚀 Start/stop services with a single click
-- 👥 Group services for bulk operations
-- 🌓 Dark/Light mode for all-day coding sessions
-- 🎯 Real-time service status monitoring
-- 🎨 Beautiful, modern UI with confetti celebrations! 
+## Features
 
-## 🛠 Tech Stack
-- **Framework**: [React](https://react.dev/) + [Remix.run](https://remix.run/) (v7)
-- **Language**: TypeScript (strict mode)
-- **Styling**: Tailwind CSS
-- **Architecture**: Epic Stack by Kent C. Dodds
-- **State Management**: React Router Data Loaders
-- **Database**: SQLite with Prisma ORM
-- **UI Components**: Custom components with dark mode support
+- 🚀 Start/Stop services with a single click
+- 📊 Real-time status monitoring
+- 🔍 Live service logs
+- 👥 Group services for batch operations
+- 🌙 Dark mode support
+- 🎯 Port management and conflict resolution
+- 📝 Service descriptions and metadata
 
-## 🚀 Quick Start
+## Requirements
 
-### Prerequisites
 - Node.js >= 20.0.0
-- npm or yarn
-- SQLite (included in most systems)
-- A desire for organized microservices
+- SQLite (included via Prisma)
+- npm (for dashboard)
+- yarn (for services)
 
-### Installation
+## Setup
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/microservices-dashboard.git
 cd microservices-dashboard
 ```
 
-2. Install dependencies:
+2. Install dashboard dependencies:
 ```bash
 npm install
 ```
 
 3. Set up the database:
 ```bash
-npm run db:setup
+npx prisma generate
+npx prisma db push
 ```
-This will:
-- Create the SQLite database
-- Run migrations
-- Migrate existing data from services.json (if it exists)
-- Create a backup of services.json
 
 4. Start the development server:
 ```bash
 npm run dev
 ```
 
-5. Open http://localhost:3000 and enjoy your new mission control center! 🎉
+## Database Schema
 
-## 🗂 Project Structure
-```
-/app
-  /components     # Reusable UI components
-  /routes         # Route components and data loaders
-  /utils         # Utility functions and types
-/prisma
-  schema.prisma  # Database schema
-  seed.ts        # Database seeding script
-```
+The application uses Prisma with SQLite. The schema includes:
 
-## 🔧 Database Schema
+- Services: Stores microservice configurations and status
+- Groups: Manages service groupings for batch operations
 
-### Service Model
-```prisma
-model Service {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  port        Int
-  path        String
-  status      String   @default("stopped")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  groups      Group[]  @relation("GroupToService")
-}
+## Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+DATABASE_URL="file:./data.db?connection_limit=1"
 ```
 
-### Group Model
-```prisma
-model Group {
-  id          String    @id @default(uuid())
-  name        String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  services    Service[] @relation("GroupToService")
-}
-```
+## Managing Services
 
-## 📝 Database Management
+### Adding Services
+Through the UI, you can add services with:
+- Name
+- Port number
+- Service path (where the service is located)
+- Description (optional)
 
-### Available Scripts
-- `npm run db:migrate` - Run database migrations
-- `npm run db:seed` - Seed the database with initial data
-- `npm run db:setup` - Complete database setup (migrate + seed)
-
-## 🔧 Configuration
-Services are configured in `services.json` at the root of the project:
-```json
-{
-  "services": [],
-  "groups": []
-}
-```
-
-## 🎯 Key Features Explained
-
-### Service Management
-- Add new services with name, port, and path
-- Start/stop individual services
-- Real-time status monitoring
+### Service Requirements
+Each service should:
+- Have a `package.json` with a `start` script
+- Use `yarn` as its package manager
+- Be accessible via `yarn start`
 
 ### Service Groups
-- Create groups for related services
-- Bulk start/stop operations
-- Easy service assignment and removal
+Create groups to manage multiple services simultaneously:
+- Start/stop entire groups
+- Add/remove services from groups
+- Name and organize groups
 
-### Dark Mode
-- Automatic system preference detection
-- Manual toggle option
-- Consistent styling across all components
+## Contributing
 
-## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-## 📝 License
-MIT - Feel free to use this to manage your own microservices chaos!
+## License
 
----
-*Made with ❤️ by developers who got tired of having 42 terminal windows open*
-
-P.S.: The confetti is not just for show, it's for celebrating your microservices victories! 🎉 
+MIT 

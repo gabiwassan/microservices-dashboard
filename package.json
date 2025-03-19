@@ -10,7 +10,7 @@
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "node --loader ts-node/esm prisma/seed.ts",
+    "db:seed": "tsx prisma/seed.ts",
     "db:setup": "npm run db:migrate && npm run db:seed"
   },
   "dependencies": {
@@ -56,6 +56,7 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1"
