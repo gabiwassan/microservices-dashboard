@@ -8,10 +8,14 @@
     "dev": "react-router dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "node --loader ts-node/esm prisma/seed.ts",
+    "db:setup": "npm run db:migrate && npm run db:seed"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
+    "@prisma/client": "^6.5.0",
     "@react-router/fs-routes": "^7.2.0",
     "@react-router/node": "^7.2.0",
     "@react-router/serve": "^7.2.0",
@@ -22,6 +26,7 @@
     "@types/ws": "^8.18.0",
     "antd": "^5.24.3",
     "isbot": "^4.1.0",
+    "prisma": "^6.5.0",
     "react": "^18.2.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^18.2.0",
@@ -36,6 +41,7 @@
   "devDependencies": {
     "@react-router/dev": "^7.2.0",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@types/node": "^22.13.10",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
@@ -49,7 +55,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.1.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1"
   },

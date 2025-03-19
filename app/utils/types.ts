@@ -1,23 +1,18 @@
-export type ServiceStatus = "running" | "stopped" | "error";
+import type { Service, Group } from "@prisma/client";
 
-export interface MicroService {
-  id: string;
-  name: string;
-  description: string;
-  port: number;
-  path: string;
+export interface MicroService extends Service {
+  lastStarted?: Date | null;
+  lastStopped?: Date | null;
   status: ServiceStatus;
-  lastStarted?: Date;
-  lastStopped?: Date;
 }
 
-export interface ServiceGroup {
-  id: string;
-  name: string;
+export interface ServiceGroup extends Group {
   services: string[];
 }
 
+export type ServiceStatus = "running" | "stopped";
+
 export interface ActionData {
   error?: string;
-  success?: string;
+  success?: boolean;
 }

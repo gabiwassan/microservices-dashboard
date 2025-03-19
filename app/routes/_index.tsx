@@ -63,6 +63,8 @@ export const action: ActionFunction = async ({
       id: uuidv4(),
       name,
       services: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
     config.groups = [...(config.groups || []), newGroup];
@@ -126,7 +128,11 @@ export const action: ActionFunction = async ({
 };
 
 export default function Index() {
-  const { services, groups, showConfetti: initialShowConfetti } = useLoaderData<{
+  const {
+    services,
+    groups,
+    showConfetti: initialShowConfetti,
+  } = useLoaderData<{
     services: MicroService[];
     groups: ServiceGroup[];
     showConfetti: boolean;

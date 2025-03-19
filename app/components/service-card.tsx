@@ -1,6 +1,6 @@
 import { Link, useNavigation, useSubmit, useRevalidator } from "react-router";
 import { useEffect, useState, lazy, Suspense } from "react";
-import { MicroService } from "../utils/types";
+import { MicroService, ServiceStatus } from "../utils/types";
 import ServiceStatusBadge from "./service-status-badge";
 import ServiceLogs from "./service-logs";
 
@@ -144,7 +144,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           <div className="space-y-1">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               {service.name}
-              <ServiceStatusBadge status={service.status} />
+              <ServiceStatusBadge status={service.status as ServiceStatus} />
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Port:{" "}

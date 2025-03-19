@@ -15,6 +15,7 @@
 - **Styling**: Tailwind CSS
 - **Architecture**: Epic Stack by Kent C. Dodds
 - **State Management**: React Router Data Loaders
+- **Database**: SQLite with Prisma ORM
 - **UI Components**: Custom components with dark mode support
 
 ## 🚀 Quick Start
@@ -22,6 +23,7 @@
 ### Prerequisites
 - Node.js >= 20.0.0
 - npm or yarn
+- SQLite (included in most systems)
 - A desire for organized microservices
 
 ### Installation
@@ -36,12 +38,22 @@ cd microservices-dashboard
 npm install
 ```
 
-3. Start the development server:
+3. Set up the database:
+```bash
+npm run db:setup
+```
+This will:
+- Create the SQLite database
+- Run migrations
+- Migrate existing data from services.json (if it exists)
+- Create a backup of services.json
+
+4. Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Open http://localhost:3000 and enjoy your new mission control center! 🎉
+5. Open http://localhost:3000 and enjoy your new mission control center! 🎉
 
 ## 🗂 Project Structure
 ```
@@ -49,7 +61,45 @@ npm run dev
   /components     # Reusable UI components
   /routes         # Route components and data loaders
   /utils         # Utility functions and types
+/prisma
+  schema.prisma  # Database schema
+  seed.ts        # Database seeding script
 ```
+
+## 🔧 Database Schema
+
+### Service Model
+```prisma
+model Service {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  port        Int
+  path        String
+  status      String   @default("stopped")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  groups      Group[]  @relation("GroupToService")
+}
+```
+
+### Group Model
+```prisma
+model Group {
+  id          String    @id @default(uuid())
+  name        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  services    Service[] @relation("GroupToService")
+}
+```
+
+## 📝 Database Management
+
+### Available Scripts
+- `npm run db:migrate` - Run database migrations
+- `npm run db:seed` - Seed the database with initial data
+- `npm run db:setup` - Complete database setup (migrate + seed)
 
 ## 🔧 Configuration
 Services are configured in `services.json` at the root of the project:
