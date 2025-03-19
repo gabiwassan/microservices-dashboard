@@ -22,23 +22,27 @@ A modern dashboard to manage and monitor your microservices.
 ## Setup
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/microservices-dashboard.git
 cd microservices-dashboard
 ```
 
 2. Install dashboard dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up the database:
+
 ```bash
 npx prisma generate
 npx prisma db push
 ```
 
 4. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -61,20 +65,26 @@ DATABASE_URL="file:./data.db?connection_limit=1"
 ## Managing Services
 
 ### Adding Services
+
 Through the UI, you can add services with:
+
 - Name
 - Port number
 - Service path (where the service is located)
 - Description (optional)
 
 ### Service Requirements
+
 Each service should:
+
 - Have a `package.json` with a `start` script
 - Use `yarn` as its package manager
 - Be accessible via `yarn start`
 
 ### Service Groups
+
 Create groups to manage multiple services simultaneously:
+
 - Start/stop entire groups
 - Add/remove services from groups
 - Name and organize groups
@@ -89,4 +99,4 @@ Create groups to manage multiple services simultaneously:
 
 ## License
 
-MIT 
+MIT

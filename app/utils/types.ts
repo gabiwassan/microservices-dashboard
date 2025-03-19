@@ -1,4 +1,4 @@
-import type { Service, Group } from "@prisma/client";
+import type { Service, Group } from '@prisma/client';
 
 export interface MicroService extends Service {
   lastStarted?: Date | null;
@@ -10,7 +10,7 @@ export interface ServiceGroup extends Group {
   services: string[];
 }
 
-export type ServiceStatus = "running" | "stopped";
+export type ServiceStatus = 'running' | 'stopped';
 
 export interface ActionData {
   error?: string;

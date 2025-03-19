@@ -4,21 +4,21 @@ import {
   LoaderFunction,
   useActionData,
   Form,
-} from "react-router";
+} from 'react-router';
 import {
   getAllServices,
   addService,
   removeService,
   startServiceById,
   stopServiceById,
-} from "~/utils/service-manager.server";
-import { ActionData } from "~/utils/types";
+} from '~/utils/service-manager.server';
+import { ActionData } from '~/utils/types';
 
 export const loader: LoaderFunction = async () => {
   const services = await getAllServices();
   return new Response(JSON.stringify({ services }), {
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 };
@@ -27,16 +27,16 @@ export const action: ActionFunction = async ({
   request,
 }): Promise<ActionData | Response> => {
   const formData = await request.formData();
-  const action = formData.get("action") as string;
+  const action = formData.get('action') as string;
 
-  if (action === "add") {
-    const name = formData.get("name") as string;
-    const description = formData.get("description") as string;
-    const port = parseInt(formData.get("port") as string, 10);
-    const path = formData.get("path") as string;
+  if (action === 'add') {
+    const name = formData.get('name') as string;
+    const description = formData.get('description') as string;
+    const port = parseInt(formData.get('port') as string, 10);
+    const path = formData.get('path') as string;
 
     if (!name || !port || !path) {
-      return { error: "All fields are required" };
+      return { error: 'All fields are required' };
     }
 
     await addService({
@@ -46,19 +46,19 @@ export const action: ActionFunction = async ({
       path,
     });
 
-    return redirect("/?newService=true");
-  } else if (action === "remove") {
-    const serviceId = formData.get("serviceId") as string;
+    return redirect('/?newService=true');
+  } else if (action === 'remove') {
+    const serviceId = formData.get('serviceId') as string;
     await removeService(serviceId);
-  } else if (action === "start") {
-    const serviceId = formData.get("serviceId") as string;
+  } else if (action === 'start') {
+    const serviceId = formData.get('serviceId') as string;
     await startServiceById(serviceId);
-  } else if (action === "stop") {
-    const serviceId = formData.get("serviceId") as string;
+  } else if (action === 'stop') {
+    const serviceId = formData.get('serviceId') as string;
     await stopServiceById(serviceId);
   }
 
-  return redirect("/services");
+  return redirect('/services');
 };
 
 export default function Services() {

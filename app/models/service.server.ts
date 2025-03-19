@@ -1,10 +1,10 @@
-import { exec, spawn, SpawnOptions } from "child_process";
-import path from "path";
-import fs from "fs";
-import { MicroService, ServiceStatus } from "~/utils/types";
-import { broadcastServiceLogs } from "~/utils/websocket.server";
+import { exec, spawn, SpawnOptions } from 'child_process';
+import path from 'path';
+import fs from 'fs';
+import { MicroService, ServiceStatus } from '~/utils/types';
+import { broadcastServiceLogs } from '~/utils/websocket.server';
 
-const SERVICES_CONFIG_PATH = path.join(process.cwd(), "services.json");
+const SERVICES_CONFIG_PATH = path.join(process.cwd(), 'services.json');
 const MAX_RETRIES = 10;
 const RETRY_INTERVAL = 1000;
 
@@ -12,12 +12,12 @@ const RETRY_INTERVAL = 1000;
  * Ensures a port is free by killing any process using it
  */
 export async function cleanupPort(port: number): Promise<boolean> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     console.info(`🔄 Attempting to free port ${port}...`);
 
     exec(
       `lsof -i:${port} -t | xargs kill -9 2>/dev/null || true`,
-      async (error) => {
+      async error => {
         if (error) {
           console.info(`✨ Port ${port} is already free`);
           resolve(true);
@@ -25,17 +25,17 @@ export async function cleanupPort(port: number): Promise<boolean> {
         }
 
         // Wait a bit to ensure the port is really free
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         console.info(`✅ Port ${port} has been freed successfully`);
         resolve(true);
-      }
+      },
     );
   });
 }
 
 function ensureLogDirectory(servicePath: string): string {
-  const logDir = path.join(servicePath, "logs");
-  const logFile = path.join(logDir, "service.log");
+  const logDir = path.join(servicePath, 'logs');
+  const logFile = path.join(logDir, 'service.log');
 
   if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, { recursive: true });
@@ -49,12 +49,12 @@ export async function loadServices(): Promise<MicroService[]> {
     const defaultServices: MicroService[] = [];
     fs.writeFileSync(
       SERVICES_CONFIG_PATH,
-      JSON.stringify(defaultServices, null, 2)
+      JSON.stringify(defaultServices, null, 2),
     );
     return defaultServices;
   }
 
-  const data = fs.readFileSync(SERVICES_CONFIG_PATH, "utf8");
+  const data = fs.readFileSync(SERVICES_CONFIG_PATH, 'utf8');
   return JSON.parse(data);
 }
 
@@ -63,19 +63,19 @@ export async function saveServices(services: MicroService[]): Promise<void> {
 }
 
 export async function checkServiceStatus(
-  service: MicroService
+  service: MicroService,
 ): Promise<ServiceStatus> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     exec(`lsof -i:${service.port}`, (error, stdout) => {
       if (error) {
-        resolve("stopped");
+        resolve('stopped');
         return;
       }
 
-      if (stdout.includes("node")) {
-        resolve("running");
+      if (stdout.includes('node')) {
+        resolve('running');
       } else {
-        resolve("stopped");
+        resolve('stopped');
       }
     });
   });
@@ -84,16 +84,16 @@ export async function checkServiceStatus(
 async function waitForServiceReady(service: MicroService): Promise<boolean> {
   for (let i = 0; i < MAX_RETRIES; i++) {
     const status = await checkServiceStatus(service);
-    if (status === "running") {
+    if (status === 'running') {
       return true;
     }
-    await new Promise((resolve) => setTimeout(resolve, RETRY_INTERVAL));
+    await new Promise(resolve => setTimeout(resolve, RETRY_INTERVAL));
   }
   return false;
 }
 
 export async function startService(service: MicroService): Promise<boolean> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const startServiceProcess = async () => {
       try {
         console.info(`🚀 Starting service: ${service.name}`);
@@ -103,12 +103,12 @@ export async function startService(service: MicroService): Promise<boolean> {
 
         const initializeService = () => {
           const logFile = ensureLogDirectory(service.path);
-          const logStream = fs.createWriteStream(logFile, { flags: "a" });
+          const logStream = fs.createWriteStream(logFile, { flags: 'a' });
 
           const options: SpawnOptions = {
             windowsHide: true,
             cwd: service.path,
-            stdio: ["inherit", "pipe", "pipe"], // Changed to pipe stdout and stderr
+            stdio: ['inherit', 'pipe', 'pipe'], // Changed to pipe stdout and stderr
           };
 
           const timestamp = () => new Date().toISOString();
@@ -118,11 +118,11 @@ export async function startService(service: MicroService): Promise<boolean> {
           logStream.write(`\n${logMessage}\n`);
           broadcastServiceLogs(service.id, logMessage);
 
-          const child = spawn("yarn", ["start"], options);
+          const child = spawn('yarn', ['start'], options);
 
           if (child.stdout) {
-            child.stdout.on("data", (data: Buffer) => {
-              const lines = data.toString().split("\n");
+            child.stdout.on('data', (data: Buffer) => {
+              const lines = data.toString().split('\n');
               lines.forEach((line: string) => {
                 if (line.trim()) {
                   const logLine = `[${timestamp()}] ${line}`;
@@ -134,8 +134,8 @@ export async function startService(service: MicroService): Promise<boolean> {
           }
 
           if (child.stderr) {
-            child.stderr.on("data", (data: Buffer) => {
-              const lines = data.toString().split("\n");
+            child.stderr.on('data', (data: Buffer) => {
+              const lines = data.toString().split('\n');
               lines.forEach((line: string) => {
                 if (line.trim()) {
                   const logLine = `[${timestamp()}] ERROR: ${line}`;
@@ -146,7 +146,7 @@ export async function startService(service: MicroService): Promise<boolean> {
             });
           }
 
-          child.on("error", (error) => {
+          child.on('error', error => {
             const errorMessage = `Failed to start service ${service.name}: ${error.message}`;
             logStream.write(`[${timestamp()}] ${errorMessage}\n`);
             broadcastServiceLogs(service.id, errorMessage);
@@ -154,7 +154,7 @@ export async function startService(service: MicroService): Promise<boolean> {
             resolve(false);
           });
 
-          waitForServiceReady(service).then((isReady) => {
+          waitForServiceReady(service).then(isReady => {
             if (!isReady) {
               const timeoutMessage = `Service ${service.name} failed to start within expected time`;
               logStream.write(`[${timestamp()}] ${timeoutMessage}\n`);
@@ -172,7 +172,7 @@ export async function startService(service: MicroService): Promise<boolean> {
         };
 
         // Small delay to ensure port is really free
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         initializeService();
       } catch (error) {
         const errorMessage = `Unexpected error while starting service ${service.name}: ${error}`;
@@ -187,17 +187,17 @@ export async function startService(service: MicroService): Promise<boolean> {
 }
 
 export async function stopService(service: MicroService): Promise<boolean> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const logFile = ensureLogDirectory(service.path);
-    const logStream = fs.createWriteStream(logFile, { flags: "a" });
+    const logStream = fs.createWriteStream(logFile, { flags: 'a' });
     const timestamp = () => new Date().toISOString();
 
     logStream.write(`\n[${timestamp()}] Stopping service ${service.name}...\n`);
 
-    exec(`lsof -i:${service.port} -t | xargs kill -9`, (error) => {
+    exec(`lsof -i:${service.port} -t | xargs kill -9`, error => {
       if (error) {
         logStream.write(
-          `[${timestamp()}] Failed to stop service: ${error.message}\n`
+          `[${timestamp()}] Failed to stop service: ${error.message}\n`,
         );
         console.error(`Failed to stop service ${service.name}:`, error);
         resolve(false);
@@ -207,10 +207,10 @@ export async function stopService(service: MicroService): Promise<boolean> {
       const checkStopped = () => {
         let retries = 0;
         const check = () => {
-          checkServiceStatus(service).then((status) => {
-            if (status === "stopped") {
+          checkServiceStatus(service).then(status => {
+            if (status === 'stopped') {
               logStream.write(
-                `[${timestamp()}] Service stopped successfully\n`
+                `[${timestamp()}] Service stopped successfully\n`,
               );
               resolve(true);
               return;
@@ -219,10 +219,10 @@ export async function stopService(service: MicroService): Promise<boolean> {
             retries++;
             if (retries >= MAX_RETRIES) {
               logStream.write(
-                `[${timestamp()}] Service did not stop within expected time\n`
+                `[${timestamp()}] Service did not stop within expected time\n`,
               );
               console.error(
-                `Service ${service.name} did not stop within expected time`
+                `Service ${service.name} did not stop within expected time`,
               );
               resolve(false);
               return;

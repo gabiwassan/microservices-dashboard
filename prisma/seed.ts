@@ -24,7 +24,7 @@ async function main() {
     const servicesPath = join(process.cwd(), 'services.json');
     if (existsSync(servicesPath)) {
       const data = JSON.parse(readFileSync(servicesPath, 'utf8'));
-      
+
       // Migrate services
       if (data.services) {
         for (const service of data.services) {
@@ -61,7 +61,9 @@ async function main() {
               id: group.id,
               name: group.name,
               services: {
-                connect: group.services.map((serviceId: string) => ({ id: serviceId })),
+                connect: group.services.map((serviceId: string) => ({
+                  id: serviceId,
+                })),
               },
             },
           });
@@ -81,10 +83,10 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
+  .catch(e => {
     console.error(e);
     process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
-  }); 
+  });

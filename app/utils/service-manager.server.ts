@@ -1,8 +1,8 @@
-import { checkServiceStatus } from "~/models/service.server";
-import { prisma } from "./db.server";
-import type { MicroService } from "./types";
-import { exec } from "child_process";
-import { promisify } from "util";
+import { checkServiceStatus } from '~/models/service.server';
+import { prisma } from './db.server';
+import type { MicroService } from './types';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
@@ -21,7 +21,7 @@ async function waitForPort(port: number, timeout = 5000): Promise<boolean> {
     if (await isPortInUse(port)) {
       return true;
     }
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
   return false;
 }
@@ -62,15 +62,15 @@ export async function getAllServices() {
 
   return {
     services,
-    groups: groups.map((group) => ({
+    groups: groups.map(group => ({
       ...group,
-      services: group.services.map((service) => service.id),
+      services: group.services.map(service => service.id),
     })),
   };
 }
 
 export async function addService(
-  service: Pick<MicroService, "name" | "description" | "port" | "path">
+  service: Pick<MicroService, 'name' | 'description' | 'port' | 'path'>,
 ) {
   return prisma.service.create({
     data: {
@@ -78,7 +78,7 @@ export async function addService(
       description: service.description,
       port: service.port,
       path: service.path,
-      status: "stopped",
+      status: 'stopped',
     },
   });
 }
@@ -111,12 +111,12 @@ export async function startServiceById(id: string) {
     // Check if service is already running
     if (await isPortInUse(service.port)) {
       console.log(
-        `Service ${service.name} is already running on port ${service.port}`
+        `Service ${service.name} is already running on port ${service.port}`,
       );
       return prisma.service.update({
         where: { id },
         data: {
-          status: "running",
+          status: 'running',
         },
       });
     }
@@ -134,7 +134,7 @@ export async function startServiceById(id: string) {
     return prisma.service.update({
       where: { id },
       data: {
-        status: "running",
+        status: 'running',
       },
     });
   } catch (error) {
@@ -160,7 +160,7 @@ export async function stopServiceById(id: string) {
     return prisma.service.update({
       where: { id },
       data: {
-        status: "stopped",
+        status: 'stopped',
       },
     });
   } catch (error) {
@@ -205,7 +205,7 @@ export async function addServiceToGroup(groupId: string, serviceId: string) {
 
 export async function removeServiceFromGroup(
   groupId: string,
-  serviceId: string
+  serviceId: string,
 ) {
   return prisma.group.update({
     where: { id: groupId },

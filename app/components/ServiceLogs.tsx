@@ -18,18 +18,21 @@ export default function ServiceLogs({ service }: ServiceLogsProps) {
 
     // Create new WebSocket connection
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const ws = new WebSocket(`${protocol}//${window.location.host}/ws?serviceId=${service.id}`);
+    const ws = new WebSocket(
+      `${protocol}//${window.location.host}/ws?serviceId=${service.id}`,
+    );
     wsRef.current = ws;
 
-    ws.onmessage = (event) => {
+    ws.onmessage = event => {
       try {
         const message = JSON.parse(event.data);
         if (message.type === 'log') {
           setLogs(prev => [...prev, message.data]);
-          
+
           // Auto-scroll to bottom
           if (logsContainerRef.current) {
-            logsContainerRef.current.scrollTop = logsContainerRef.current.scrollHeight;
+            logsContainerRef.current.scrollTop =
+              logsContainerRef.current.scrollHeight;
           }
         }
       } catch (error) {
@@ -37,7 +40,7 @@ export default function ServiceLogs({ service }: ServiceLogsProps) {
       }
     };
 
-    ws.onerror = (error) => {
+    ws.onerror = error => {
       console.error('WebSocket error:', error);
     };
 
@@ -67,4 +70,4 @@ export default function ServiceLogs({ service }: ServiceLogsProps) {
       </div>
     </div>
   );
-} 
+}

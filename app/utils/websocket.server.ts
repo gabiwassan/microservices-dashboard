@@ -1,8 +1,8 @@
-import { WebSocket, WebSocketServer } from "ws";
-import type { IncomingMessage, Server as HttpServer } from "http";
+import { WebSocket, WebSocketServer } from 'ws';
+import type { IncomingMessage, Server as HttpServer } from 'http';
 
 interface LogMessage {
-  type: "log";
+  type: 'log';
   data: string;
   timestamp: string;
 }
@@ -12,23 +12,23 @@ const serviceLogClients = new Map<string, Set<WebSocket>>();
 
 export function initializeWebSocketServer(server: HttpServer) {
   if (wss) {
-    console.warn("WebSocket server already initialized");
+    console.warn('WebSocket server already initialized');
     return;
   }
 
   wss = new WebSocketServer({
     server,
-    path: "/ws",
+    path: '/ws',
   });
 
-  wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
+  wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     try {
-      const url = new URL(req.url || "", `http://${req.headers.host}`);
-      const serviceId = url.searchParams.get("serviceId");
+      const url = new URL(req.url || '', `http://${req.headers.host}`);
+      const serviceId = url.searchParams.get('serviceId');
 
       if (!serviceId) {
-        console.warn("WebSocket connection attempt without serviceId");
-        ws.close(1008, "ServiceId is required");
+        console.warn('WebSocket connection attempt without serviceId');
+        ws.close(1008, 'ServiceId is required');
         return;
       }
 
@@ -41,23 +41,23 @@ export function initializeWebSocketServer(server: HttpServer) {
       if (clients) {
         clients.add(ws);
         console.log(
-          `Client connected to service ${serviceId}. Total clients: ${clients.size}`
+          `Client connected to service ${serviceId}. Total clients: ${clients.size}`,
         );
       }
 
       // Setup heartbeat
       ws.isAlive = true;
-      ws.on("pong", () => {
+      ws.on('pong', () => {
         ws.isAlive = true;
       });
 
       // Handle client disconnect
-      ws.on("close", () => {
+      ws.on('close', () => {
         const clients = serviceLogClients.get(serviceId);
         if (clients) {
           clients.delete(ws);
           console.log(
-            `Client disconnected from service ${serviceId}. Remaining clients: ${clients.size}`
+            `Client disconnected from service ${serviceId}. Remaining clients: ${clients.size}`,
           );
 
           if (clients.size === 0) {
@@ -68,12 +68,12 @@ export function initializeWebSocketServer(server: HttpServer) {
       });
 
       // Handle errors
-      ws.on("error", (error) => {
+      ws.on('error', error => {
         console.error(`WebSocket error for service ${serviceId}:`, error);
       });
     } catch (error) {
-      console.error("Error handling WebSocket connection:", error);
-      ws.close(1011, "Internal server error");
+      console.error('Error handling WebSocket connection:', error);
+      ws.close(1011, 'Internal server error');
     }
   });
 
@@ -91,11 +91,11 @@ export function initializeWebSocketServer(server: HttpServer) {
     });
   }, 30000);
 
-  wss.on("close", () => {
+  wss.on('close', () => {
     clearInterval(interval);
   });
 
-  console.log("WebSocket server initialized");
+  console.log('WebSocket server initialized');
 }
 
 export function broadcastServiceLogs(serviceId: string, log: string): void {
@@ -103,21 +103,21 @@ export function broadcastServiceLogs(serviceId: string, log: string): void {
   if (!clients || clients.size === 0) return;
 
   const message: LogMessage = {
-    type: "log",
+    type: 'log',
     data: log,
     timestamp: new Date().toISOString(),
   };
 
   const messageStr = JSON.stringify(message);
 
-  clients.forEach((client) => {
+  clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
       try {
         client.send(messageStr);
       } catch (error) {
         console.error(
           `Error sending log to client for service ${serviceId}:`,
-          error
+          error,
         );
         client.terminate();
       }
@@ -126,7 +126,7 @@ export function broadcastServiceLogs(serviceId: string, log: string): void {
 }
 
 // Extend WebSocket type to include isAlive property
-declare module "ws" {
+declare module 'ws' {
   interface WebSocket {
     isAlive: boolean;
   }

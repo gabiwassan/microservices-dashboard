@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Popover, Button, Input, Tag, Space, message, Select } from "antd";
-import { PlusOutlined, TeamOutlined, EditOutlined } from "@ant-design/icons";
-import { useNavigation, useRevalidator } from "react-router";
+import React, { useState, useEffect } from 'react';
+import { Popover, Button, Input, Tag, Space, message, Select } from 'antd';
+import { PlusOutlined, TeamOutlined, EditOutlined } from '@ant-design/icons';
+import { useNavigation, useRevalidator } from 'react-router';
 
 interface ServiceGroup {
   id: string;
@@ -36,13 +36,13 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
   onRemoveService,
   onEditGroup,
 }) => {
-  const [newGroupName, setNewGroupName] = useState("");
+  const [newGroupName, setNewGroupName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [editingGroup, setEditingGroup] = useState<string | null>(null);
-  const [editingName, setEditingName] = useState("");
+  const [editingName, setEditingName] = useState('');
   const [processingGroups, setProcessingGroups] = useState<{
-    [key: string]: { isProcessing: boolean; action: "start" | "stop" | null };
+    [key: string]: { isProcessing: boolean; action: 'start' | 'stop' | null };
   }>({});
 
   const navigation = useNavigation();
@@ -51,25 +51,25 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
   useEffect(() => {
     if (navigation.formData) {
       const formData = navigation.formData;
-      const actionType = formData.get("action") as string;
-      const groupId = formData.get("groupId") as string;
+      const actionType = formData.get('action') as string;
+      const groupId = formData.get('groupId') as string;
 
       if (
         groupId &&
-        (actionType === "startGroup" || actionType === "stopGroup")
+        (actionType === 'startGroup' || actionType === 'stopGroup')
       ) {
-        setProcessingGroups((prev) => ({
+        setProcessingGroups(prev => ({
           ...prev,
           [groupId]: {
             isProcessing: true,
-            action: actionType === "startGroup" ? "start" : "stop",
+            action: actionType === 'startGroup' ? 'start' : 'stop',
           },
         }));
       }
     } else {
       // Check if any group is processing
       const hasProcessingGroups = Object.values(processingGroups).some(
-        (g) => g.isProcessing
+        g => g.isProcessing,
       );
       if (hasProcessingGroups) {
         const timer = setTimeout(() => {
@@ -84,7 +84,7 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
   useEffect(() => {
     let timer: NodeJS.Timeout;
     const hasProcessingGroups = Object.values(processingGroups).some(
-      (g) => g.isProcessing
+      g => g.isProcessing,
     );
 
     if (hasProcessingGroups) {
@@ -101,9 +101,9 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
   const handleCreateGroup = () => {
     if (newGroupName.trim()) {
       onCreateGroup(newGroupName.trim());
-      setNewGroupName("");
+      setNewGroupName('');
     } else {
-      message.warning("Please enter a group name");
+      message.warning('Please enter a group name');
     }
   };
 
@@ -115,7 +115,7 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
   };
 
   const handleEditGroup = (groupId: string) => {
-    const group = groups.find((g) => g.id === groupId);
+    const group = groups.find(g => g.id === groupId);
     if (group) {
       setEditingGroup(groupId);
       setEditingName(group.name);
@@ -126,7 +126,7 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
     if (editingGroup && editingName.trim()) {
       onEditGroup(editingGroup, editingName.trim());
       setEditingGroup(null);
-      setEditingName("");
+      setEditingName('');
     }
   };
 
@@ -149,7 +149,7 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
           <Input
             placeholder="New group name"
             value={newGroupName}
-            onChange={(e) => setNewGroupName(e.target.value)}
+            onChange={e => setNewGroupName(e.target.value)}
             onPressEnter={handleCreateGroup}
             className="text-base dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 dark:placeholder-gray-400"
             size="large"
@@ -176,7 +176,7 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
             size="large"
             popupClassName="dark:bg-gray-700 dark:text-white"
           >
-            {groups.map((group) => (
+            {groups.map(group => (
               <Select.Option
                 key={group.id}
                 value={group.id}
@@ -198,12 +198,12 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
             >
               {services
                 .filter(
-                  (service) =>
+                  service =>
                     !groups
-                      .find((g) => g.id === selectedGroup)
-                      ?.services.includes(service.id)
+                      .find(g => g.id === selectedGroup)
+                      ?.services.includes(service.id),
                 )
-                .map((service) => (
+                .map(service => (
                   <Select.Option
                     key={service.id}
                     value={service.id}
@@ -229,7 +229,7 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
       </div>
 
       <div className="space-y-6">
-        {groups.map((group) => (
+        {groups.map(group => (
           <div
             key={group.id}
             className="p-6 border rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700"
@@ -239,7 +239,7 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
                 <div className="flex items-center gap-3 flex-1">
                   <Input
                     value={editingName}
-                    onChange={(e) => setEditingName(e.target.value)}
+                    onChange={e => setEditingName(e.target.value)}
                     onPressEnter={handleSaveEdit}
                     className="text-lg dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
                     size="large"
@@ -275,14 +275,14 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
                     transition-all duration-200
                     ${
                       processingGroups[group.id]?.isProcessing
-                        ? "bg-gray-100 text-gray-600 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
+                        ? 'bg-gray-100 text-gray-600 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
                         : group.services.some(
-                            (sid) =>
-                              services.find((s) => s.id === sid)?.status ===
-                              "running"
-                          )
-                        ? "bg-red-50 text-red-600 border-red-100 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/30 dark:hover:border-red-500/30"
-                        : "bg-green-50 text-green-600 border-green-100 hover:bg-green-100 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 dark:hover:bg-green-500/30 dark:hover:border-green-500/30"
+                              sid =>
+                                services.find(s => s.id === sid)?.status ===
+                                'running',
+                            )
+                          ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/30 dark:hover:border-red-500/30'
+                          : 'bg-green-50 text-green-600 border-green-100 hover:bg-green-100 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 dark:hover:bg-green-500/30 dark:hover:border-green-500/30'
                     }
                   `}
                   onClick={() => handleStartGroup(group.id)}
@@ -311,9 +311,9 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
                         ></path>
                       </svg>
                       <span>
-                        {processingGroups[group.id]?.action === "start"
-                          ? "Starting"
-                          : "Stopping"}
+                        {processingGroups[group.id]?.action === 'start'
+                          ? 'Starting'
+                          : 'Stopping'}
                       </span>
                     </span>
                   ) : (
@@ -338,8 +338,8 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
                     transition-all duration-200
                     ${
                       processingGroups[group.id]?.isProcessing
-                        ? "bg-gray-100 text-gray-600 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
-                        : "bg-red-50 text-red-600 border-red-100 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/30 dark:hover:border-red-500/30"
+                        ? 'bg-gray-100 text-gray-600 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
+                        : 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/30 dark:hover:border-red-500/30'
                     }
                   `}
                   onClick={() => handleStopGroup(group.id)}
@@ -368,9 +368,9 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
                         ></path>
                       </svg>
                       <span>
-                        {processingGroups[group.id]?.action === "start"
-                          ? "Starting"
-                          : "Stopping"}
+                        {processingGroups[group.id]?.action === 'start'
+                          ? 'Starting'
+                          : 'Stopping'}
                       </span>
                     </span>
                   ) : (
@@ -390,12 +390,12 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
               </Space>
             </div>
             <div className="flex flex-wrap gap-3">
-              {group.services.map((serviceId) => {
-                const service = services.find((s) => s.id === serviceId);
+              {group.services.map(serviceId => {
+                const service = services.find(s => s.id === serviceId);
                 return service ? (
                   <Tag
                     key={serviceId}
-                    color={service.status === "running" ? "green" : "default"}
+                    color={service.status === 'running' ? 'green' : 'default'}
                     closable
                     onClose={() => onRemoveService(group.id, serviceId)}
                     className="text-base px-3 py-1"
@@ -427,7 +427,7 @@ export const ServiceGroups: React.FC<ServiceGroupsProps> = ({
       trigger="click"
       placement="bottomLeft"
       overlayClassName="dark:bg-gray-800 dark:border-gray-700"
-      styles={{ body: { background: "inherit" } }}
+      styles={{ body: { background: 'inherit' } }}
     >
       <Button icon={<TeamOutlined />} size="large">
         Groups

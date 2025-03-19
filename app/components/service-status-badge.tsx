@@ -4,7 +4,9 @@ interface ServiceStatusBadgeProps {
   status: ServiceStatus;
 }
 
-export default function ServiceStatusBadge({ status }: ServiceStatusBadgeProps) {
+export default function ServiceStatusBadge({
+  status,
+}: ServiceStatusBadgeProps) {
   const getStatusColor = () => {
     switch (status) {
       case 'running':
@@ -28,8 +30,12 @@ export default function ServiceStatusBadge({ status }: ServiceStatusBadgeProps) 
   };
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor()}`}>
-      <span className={`w-2 h-2 mr-1.5 rounded-full ${status === 'running' ? 'bg-green-600 animate-pulse' : 'bg-gray-400'}`}></span>
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor()}`}
+    >
+      <span
+        className={`w-2 h-2 mr-1.5 rounded-full ${status === 'running' ? 'bg-green-600 animate-pulse' : 'bg-gray-400'}`}
+      ></span>
       {getStatusText()}
     </span>
   );

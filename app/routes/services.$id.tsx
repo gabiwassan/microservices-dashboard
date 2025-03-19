@@ -1,8 +1,8 @@
-import { useParams } from "react-router";
-import ServiceLogs from "../components/ServiceLogs";
-import type { MicroService } from "../utils/types";
-import { useEffect, useState } from "react";
-import { getServiceById } from "../utils/service-manager.server";
+import { useParams } from 'react-router';
+import ServiceLogs from '../components/ServiceLogs';
+import type { MicroService } from '../utils/types';
+import { useEffect, useState } from 'react';
+import { getServiceById } from '../utils/service-manager.server';
 
 export default function ServiceDetail() {
   const { id } = useParams();
@@ -13,14 +13,14 @@ export default function ServiceDetail() {
   useEffect(() => {
     const fetchService = async () => {
       try {
-        if (!id) throw new Error("Service ID is required");
+        if (!id) throw new Error('Service ID is required');
         const serviceData = await getServiceById(id);
         if (!serviceData) {
-          throw new Error("Service not found");
+          throw new Error('Service not found');
         }
         setService(serviceData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load service");
+        setError(err instanceof Error ? err.message : 'Failed to load service');
       } finally {
         setLoading(false);
       }
@@ -41,7 +41,7 @@ export default function ServiceDetail() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {error || "Service not found"}
+          {error || 'Service not found'}
         </div>
       </div>
     );
@@ -56,7 +56,7 @@ export default function ServiceDetail() {
             <p className="text-gray-600">Status</p>
             <p
               className={`font-semibold ${
-                service.status === "running" ? "text-green-600" : "text-red-600"
+                service.status === 'running' ? 'text-green-600' : 'text-red-600'
               }`}
             >
               {service.status.charAt(0).toUpperCase() + service.status.slice(1)}

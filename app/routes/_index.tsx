@@ -1,28 +1,28 @@
-import type { ActionFunction, LoaderFunction } from "react-router";
-import { redirect, useLoaderData, useSubmit } from "react-router";
-import ServiceList from "~/components/service-list";
-import { ServiceGroups } from "~/components/service-groups";
+import type { ActionFunction, LoaderFunction } from 'react-router';
+import { redirect, useLoaderData, useSubmit } from 'react-router';
+import ServiceList from '~/components/service-list';
+import { ServiceGroups } from '~/components/service-groups';
 import {
   getAllServices,
   startServiceById,
   stopServiceById,
-} from "~/utils/service-manager.server";
-import { ActionData, MicroService, ServiceGroup } from "~/utils/types";
-import { v4 as uuidv4 } from "uuid";
-import fs from "fs";
-import path from "path";
-import { useState, useEffect, Suspense } from "react";
-import ReactConfetti from "react-confetti";
-import { useWindowSize } from "~/utils/hooks";
-import { PrismaClient } from "@prisma/client";
+} from '~/utils/service-manager.server';
+import { ActionData, MicroService, ServiceGroup } from '~/utils/types';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import path from 'path';
+import { useState, useEffect, Suspense } from 'react';
+import ReactConfetti from 'react-confetti';
+import { useWindowSize } from '~/utils/hooks';
+import { PrismaClient } from '@prisma/client';
 
-const SERVICES_CONFIG_PATH = path.join(process.cwd(), "services.json");
+const SERVICES_CONFIG_PATH = path.join(process.cwd(), 'services.json');
 const prisma = new PrismaClient();
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { services, groups } = await getAllServices();
   const url = new URL(request.url);
-  const showConfetti = url.searchParams.get("newService") === "true";
+  const showConfetti = url.searchParams.get('newService') === 'true';
   return { services, groups, showConfetti };
 };
 
@@ -30,40 +30,40 @@ export const action: ActionFunction = async ({
   request,
 }): Promise<ActionData | Response> => {
   const formData = await request.formData();
-  const action = formData.get("action") as string;
+  const action = formData.get('action') as string;
 
-  if (action === "start") {
-    const serviceId = formData.get("serviceId") as string;
+  if (action === 'start') {
+    const serviceId = formData.get('serviceId') as string;
     await startServiceById(serviceId);
-  } else if (action === "stop") {
-    const serviceId = formData.get("serviceId") as string;
+  } else if (action === 'stop') {
+    const serviceId = formData.get('serviceId') as string;
     await stopServiceById(serviceId);
-  } else if (action === "delete") {
-    const serviceId = formData.get("serviceId") as string;
+  } else if (action === 'delete') {
+    const serviceId = formData.get('serviceId') as string;
     await prisma.service.delete({
-      where: { id: serviceId }
+      where: { id: serviceId },
     });
-  } else if (action === "startGroup") {
-    const groupId = formData.get("groupId") as string;
+  } else if (action === 'startGroup') {
+    const groupId = formData.get('groupId') as string;
     const { groups } = await getAllServices();
-    const group = groups.find((g) => g.id === groupId);
+    const group = groups.find(g => g.id === groupId);
     if (group) {
       for (const serviceId of group.services) {
         await startServiceById(serviceId);
       }
     }
-  } else if (action === "stopGroup") {
-    const groupId = formData.get("groupId") as string;
+  } else if (action === 'stopGroup') {
+    const groupId = formData.get('groupId') as string;
     const { groups } = await getAllServices();
-    const group = groups.find((g) => g.id === groupId);
+    const group = groups.find(g => g.id === groupId);
     if (group) {
       for (const serviceId of group.services) {
         await stopServiceById(serviceId);
       }
     }
-  } else if (action === "createGroup") {
-    const name = formData.get("name") as string;
-    const data = await fs.promises.readFile(SERVICES_CONFIG_PATH, "utf8");
+  } else if (action === 'createGroup') {
+    const name = formData.get('name') as string;
+    const data = await fs.promises.readFile(SERVICES_CONFIG_PATH, 'utf8');
     const config = JSON.parse(data);
 
     const newGroup: ServiceGroup = {
@@ -71,54 +71,54 @@ export const action: ActionFunction = async ({
       name,
       services: [],
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     config.groups = [...(config.groups || []), newGroup];
     await fs.promises.writeFile(
       SERVICES_CONFIG_PATH,
-      JSON.stringify(config, null, 2)
+      JSON.stringify(config, null, 2),
     );
-  } else if (action === "editGroup") {
-    const groupId = formData.get("groupId") as string;
-    const newName = formData.get("newName") as string;
-    const data = await fs.promises.readFile(SERVICES_CONFIG_PATH, "utf8");
+  } else if (action === 'editGroup') {
+    const groupId = formData.get('groupId') as string;
+    const newName = formData.get('newName') as string;
+    const data = await fs.promises.readFile(SERVICES_CONFIG_PATH, 'utf8');
     const config = JSON.parse(data);
 
     const groupIndex = config.groups.findIndex(
-      (g: ServiceGroup) => g.id === groupId
+      (g: ServiceGroup) => g.id === groupId,
     );
     if (groupIndex !== -1) {
       config.groups[groupIndex].name = newName;
       await fs.promises.writeFile(
         SERVICES_CONFIG_PATH,
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
     }
-  } else if (action === "assignService") {
-    const groupId = formData.get("groupId") as string;
-    const serviceId = formData.get("serviceId") as string;
-    const data = await fs.promises.readFile(SERVICES_CONFIG_PATH, "utf8");
+  } else if (action === 'assignService') {
+    const groupId = formData.get('groupId') as string;
+    const serviceId = formData.get('serviceId') as string;
+    const data = await fs.promises.readFile(SERVICES_CONFIG_PATH, 'utf8');
     const config = JSON.parse(data);
 
     const groupIndex = config.groups.findIndex(
-      (g: ServiceGroup) => g.id === groupId
+      (g: ServiceGroup) => g.id === groupId,
     );
     if (groupIndex !== -1) {
       config.groups[groupIndex].services.push(serviceId);
       await fs.promises.writeFile(
         SERVICES_CONFIG_PATH,
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
     }
-  } else if (action === "removeService") {
-    const groupId = formData.get("groupId") as string;
-    const serviceId = formData.get("serviceId") as string;
-    const data = await fs.promises.readFile(SERVICES_CONFIG_PATH, "utf8");
+  } else if (action === 'removeService') {
+    const groupId = formData.get('groupId') as string;
+    const serviceId = formData.get('serviceId') as string;
+    const data = await fs.promises.readFile(SERVICES_CONFIG_PATH, 'utf8');
     const config = JSON.parse(data);
 
     const groupIndex = config.groups.findIndex(
-      (g: ServiceGroup) => g.id === groupId
+      (g: ServiceGroup) => g.id === groupId,
     );
     if (groupIndex !== -1) {
       config.groups[groupIndex].services = config.groups[
@@ -126,12 +126,12 @@ export const action: ActionFunction = async ({
       ].services.filter((id: string) => id !== serviceId);
       await fs.promises.writeFile(
         SERVICES_CONFIG_PATH,
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
     }
   }
 
-  return redirect("/");
+  return redirect('/');
 };
 
 export default function Index() {
@@ -147,7 +147,7 @@ export default function Index() {
   const submit = useSubmit();
   const [showConfetti, setShowConfetti] = useState(false);
   const windowSize = useWindowSize();
-  const isBrowser = typeof window !== "undefined";
+  const isBrowser = typeof window !== 'undefined';
 
   useEffect(() => {
     if (initialShowConfetti) {
@@ -184,44 +184,44 @@ export default function Index() {
             <ServiceGroups
               services={services}
               groups={groups}
-              onCreateGroup={(name) => {
+              onCreateGroup={name => {
                 const formData = new FormData();
-                formData.append("action", "createGroup");
-                formData.append("name", name);
-                submit(formData, { method: "post" });
+                formData.append('action', 'createGroup');
+                formData.append('name', name);
+                submit(formData, { method: 'post' });
               }}
-              onStartGroup={(groupId) => {
+              onStartGroup={groupId => {
                 const formData = new FormData();
-                formData.append("action", "startGroup");
-                formData.append("groupId", groupId);
-                submit(formData, { method: "post" });
+                formData.append('action', 'startGroup');
+                formData.append('groupId', groupId);
+                submit(formData, { method: 'post' });
               }}
-              onStopGroup={(groupId) => {
+              onStopGroup={groupId => {
                 const formData = new FormData();
-                formData.append("action", "stopGroup");
-                formData.append("groupId", groupId);
-                submit(formData, { method: "post" });
+                formData.append('action', 'stopGroup');
+                formData.append('groupId', groupId);
+                submit(formData, { method: 'post' });
               }}
               onAssignService={(groupId, serviceId) => {
                 const formData = new FormData();
-                formData.append("action", "assignService");
-                formData.append("groupId", groupId);
-                formData.append("serviceId", serviceId);
-                submit(formData, { method: "post" });
+                formData.append('action', 'assignService');
+                formData.append('groupId', groupId);
+                formData.append('serviceId', serviceId);
+                submit(formData, { method: 'post' });
               }}
               onRemoveService={(groupId, serviceId) => {
                 const formData = new FormData();
-                formData.append("action", "removeService");
-                formData.append("groupId", groupId);
-                formData.append("serviceId", serviceId);
-                submit(formData, { method: "post" });
+                formData.append('action', 'removeService');
+                formData.append('groupId', groupId);
+                formData.append('serviceId', serviceId);
+                submit(formData, { method: 'post' });
               }}
               onEditGroup={(groupId, newName) => {
                 const formData = new FormData();
-                formData.append("action", "editGroup");
-                formData.append("groupId", groupId);
-                formData.append("newName", newName);
-                submit(formData, { method: "post" });
+                formData.append('action', 'editGroup');
+                formData.append('groupId', groupId);
+                formData.append('newName', newName);
+                submit(formData, { method: 'post' });
               }}
             />
             <a

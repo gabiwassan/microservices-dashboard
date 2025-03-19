@@ -1,24 +1,24 @@
-import { Link, useNavigation, useSubmit, useRevalidator } from "react-router";
-import { useEffect, useState, lazy, Suspense } from "react";
-import { MicroService, ServiceStatus } from "../utils/types";
-import ServiceStatusBadge from "./service-status-badge";
-import ServiceLogs from "./service-logs";
-import ConfirmationModal from "./confirmation-modal";
+import { Link, useNavigation, useSubmit, useRevalidator } from 'react-router';
+import { useEffect, useState, lazy, Suspense } from 'react';
+import { MicroService, ServiceStatus } from '../utils/types';
+import ServiceStatusBadge from './service-status-badge';
+import ServiceLogs from './service-logs';
+import ConfirmationModal from './confirmation-modal';
 
-const ReactConfetti = lazy(() => import("react-confetti"));
+const ReactConfetti = lazy(() => import('react-confetti'));
 
 interface ServiceCardProps {
   service: MicroService;
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
-  const isRunning = service.status === "running";
+  const isRunning = service.status === 'running';
   const submit = useSubmit();
   const navigation = useNavigation();
   const revalidator = useRevalidator();
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingAction, setProcessingAction] = useState<
-    "start" | "stop" | null
+    'start' | 'stop' | null
   >(null);
   const [showLogs, setShowLogs] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -46,26 +46,26 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     };
 
     if (isBrowser) {
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
   }, [isBrowser]);
 
   useEffect(() => {
     if (navigation.formData) {
       const formData = navigation.formData;
-      const actionType = formData.get("action") as string;
-      const serviceId = formData.get("serviceId");
+      const actionType = formData.get('action') as string;
+      const serviceId = formData.get('serviceId');
 
       if (serviceId === service.id) {
-        if (actionType === "start" || actionType === "stop") {
+        if (actionType === 'start' || actionType === 'stop') {
           setIsProcessing(true);
           setProcessingAction(actionType);
         }
       }
     } else if (isProcessing) {
       const timer = setTimeout(() => {
-        if (processingAction === "start" && service.status === "running") {
+        if (processingAction === 'start' && service.status === 'running') {
           setShowConfetti(true);
           setTimeout(() => setShowConfetti(false), 5000);
         }
@@ -100,26 +100,28 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     };
   }, [isProcessing, revalidator]);
 
-  const handleAction = (action: "start" | "stop" | "refresh" | "logs" | "delete") => {
-    if (action === "refresh") {
+  const handleAction = (
+    action: 'start' | 'stop' | 'refresh' | 'logs' | 'delete',
+  ) => {
+    if (action === 'refresh') {
       revalidator.revalidate();
       return;
     }
 
-    if (action === "logs") {
+    if (action === 'logs') {
       setShowLogs(!showLogs);
       return;
     }
 
-    if (action === "delete") {
+    if (action === 'delete') {
       setShowDeleteModal(true);
       return;
     }
 
     const formData = new FormData();
-    formData.append("action", action);
-    formData.append("serviceId", service.id);
-    submit(formData, { method: "post" });
+    formData.append('action', action);
+    formData.append('serviceId', service.id);
+    submit(formData, { method: 'post' });
   };
 
   const ConfettiEffect = () => {
@@ -154,7 +156,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
               <ServiceStatusBadge status={service.status as ServiceStatus} />
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Port:{" "}
+              Port:{' '}
               <span className="font-mono bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">
                 {service.port}
               </span>
@@ -198,7 +200,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             <p className="text-sm text-gray-900 dark:text-gray-100">
               {service.lastStarted
                 ? new Date(service.lastStarted).toLocaleString()
-                : "Never"}
+                : 'Never'}
             </p>
           </div>
           <div className="space-y-1">
@@ -208,7 +210,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             <p className="text-sm text-gray-900 dark:text-gray-100">
               {service.lastStopped
                 ? new Date(service.lastStopped).toLocaleString()
-                : "Never"}
+                : 'Never'}
             </p>
           </div>
         </div>
@@ -220,7 +222,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
       >
         <div className="flex items-center gap-2 w-full max-w-lg ml-auto">
           <button
-            onClick={() => handleAction(isRunning ? "stop" : "start")}
+            onClick={() => handleAction(isRunning ? 'stop' : 'start')}
             disabled={isProcessing}
             className={`
               w-28
@@ -229,10 +231,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
               transition-all duration-200
               ${
                 isProcessing
-                  ? "bg-gray-100 text-gray-600 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600/80 dark:hover:text-gray-200"
+                  ? 'bg-gray-100 text-gray-600 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600/80 dark:hover:text-gray-200'
                   : isRunning
-                  ? "bg-red-50 text-red-600 border-red-100 hover:bg-red-100 hover:text-red-600 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/30 dark:hover:border-red-500/30 dark:hover:text-red-400"
-                  : "bg-green-50 text-green-600 border-green-100 hover:bg-green-100 hover:text-green-600 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 dark:hover:bg-green-500/30 dark:hover:border-green-500/30 dark:hover:text-green-400"
+                    ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100 hover:text-red-600 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/30 dark:hover:border-red-500/30 dark:hover:text-red-400'
+                    : 'bg-green-50 text-green-600 border-green-100 hover:bg-green-100 hover:text-green-600 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 dark:hover:bg-green-500/30 dark:hover:border-green-500/30 dark:hover:text-green-400'
               }
             `}
           >
@@ -259,7 +261,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                   ></path>
                 </svg>
                 <span>
-                  {processingAction === "start" ? "Starting" : "Stopping"}
+                  {processingAction === 'start' ? 'Starting' : 'Stopping'}
                 </span>
               </span>
             ) : (
@@ -294,7 +296,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </button>
 
           <button
-            onClick={() => handleAction("logs")}
+            onClick={() => handleAction('logs')}
             className={`
               w-28
               inline-flex items-center justify-center gap-1.5 px-3 py-1.5 
@@ -302,8 +304,8 @@ export default function ServiceCard({ service }: ServiceCardProps) {
               transition-all duration-200
               ${
                 showLogs
-                  ? "bg-purple-50 text-purple-600 border-purple-100 hover:bg-purple-100 hover:text-purple-600 dark:bg-purple-500/10 dark:text-purple-400 dark:border-purple-500/20 dark:hover:bg-purple-500/30 dark:hover:border-purple-500/30 dark:hover:text-purple-400"
-                  : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 hover:text-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600/80 dark:hover:text-gray-200"
+                  ? 'bg-purple-50 text-purple-600 border-purple-100 hover:bg-purple-100 hover:text-purple-600 dark:bg-purple-500/10 dark:text-purple-400 dark:border-purple-500/20 dark:hover:bg-purple-500/30 dark:hover:border-purple-500/30 dark:hover:text-purple-400'
+                  : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 hover:text-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600/80 dark:hover:text-gray-200'
               }
             `}
           >
@@ -319,7 +321,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </button>
 
           <button
-            onClick={() => handleAction("refresh")}
+            onClick={() => handleAction('refresh')}
             disabled={isProcessing}
             className="
               w-28
@@ -349,7 +351,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </button>
 
           <button
-            onClick={() => handleAction("delete")}
+            onClick={() => handleAction('delete')}
             disabled={isProcessing}
             className="
               w-28
@@ -393,9 +395,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         onClose={() => setShowDeleteModal(false)}
         onConfirm={() => {
           const formData = new FormData();
-          formData.append("action", "delete");
-          formData.append("serviceId", service.id);
-          submit(formData, { method: "post" });
+          formData.append('action', 'delete');
+          formData.append('serviceId', service.id);
+          submit(formData, { method: 'post' });
         }}
         title="Delete Service"
         message={`Are you sure you want to delete ${service.name}? This action cannot be undone.`}

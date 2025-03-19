@@ -1,7 +1,7 @@
-import type { LinksFunction } from "react-router";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
-import styles from "./tailwind.css?url";
-import { useEffect, useState } from "react";
+import type { LinksFunction } from 'react-router';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import styles from './tailwind.css?url';
+import { useEffect, useState } from 'react';
 
 // Script que se ejecutará antes que React para prevenir el flash
 const themeScript = `
@@ -19,9 +19,7 @@ const themeScript = `
   }
 `;
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
-];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -67,15 +65,17 @@ export default function App() {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               Dashboard Services
             </h1>
-            <button 
-              onClick={toggleTheme} 
+            <button
+              onClick={toggleTheme}
               className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 
                 text-gray-900 dark:text-white
                 hover:bg-gray-200 dark:hover:bg-gray-700
                 focus:outline-none focus:ring-2 focus:ring-purple-500/50
                 transition-all duration-500 ease-out
                 group relative flex items-center justify-center w-10 h-10"
-              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={
+                isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'
+              }
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,9 +84,10 @@ export default function App() {
                 strokeWidth={1.5}
                 stroke="currentColor"
                 className={`w-5 h-5 absolute transition-all duration-500
-                  ${isDarkMode 
-                    ? 'rotate-90 opacity-0 scale-50' 
-                    : 'rotate-0 opacity-100 scale-100'
+                  ${
+                    isDarkMode
+                      ? 'rotate-90 opacity-0 scale-50'
+                      : 'rotate-0 opacity-100 scale-100'
                   }`}
               >
                 <path
@@ -104,9 +105,10 @@ export default function App() {
                 strokeWidth={1.5}
                 stroke="currentColor"
                 className={`w-5 h-5 absolute transition-all duration-500
-                  ${isDarkMode 
-                    ? 'rotate-0 opacity-100 scale-100' 
-                    : '-rotate-90 opacity-0 scale-50'
+                  ${
+                    isDarkMode
+                      ? 'rotate-0 opacity-100 scale-100'
+                      : '-rotate-90 opacity-0 scale-50'
                   }`}
               >
                 <path
@@ -118,11 +120,11 @@ export default function App() {
 
               {/* Indicador de hover */}
               <div className="absolute inset-0 rounded-lg ring-1 ring-gray-200 dark:ring-gray-700" />
-              <div 
+              <div
                 className="absolute inset-0 rounded-lg bg-gradient-to-tr from-purple-500/0 to-purple-500/0 
                   group-hover:from-purple-500/5 group-hover:to-purple-500/10 
                   dark:group-hover:from-purple-400/5 dark:group-hover:to-purple-400/10 
-                  transition-all duration-500" 
+                  transition-all duration-500"
               />
             </button>
           </header>
