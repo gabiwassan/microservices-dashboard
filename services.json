@@ -6,9 +6,9 @@
       "port": 3033,
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/tms-bff-service",
       "id": "15107095-a417-44f9-9fa9-29cdf839b9bd",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:52.439Z",
-      "lastStarted": "2025-03-05T16:08:18.874Z"
+      "status": "running",
+      "lastStopped": "2025-03-19T15:10:32.173Z",
+      "lastStarted": "2025-03-19T15:10:41.883Z"
     },
     {
       "name": "customer-service",
@@ -16,9 +16,9 @@
       "port": 3034,
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/customer-service",
       "id": "25107095-b417-44f9-9fa9-29cdf839b9be",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:52.529Z",
-      "lastStarted": "2025-03-05T16:46:35.161Z"
+      "status": "running",
+      "lastStopped": "2025-03-15T01:35:43.813Z",
+      "lastStarted": "2025-03-19T15:10:46.113Z"
     },
     {
       "name": "contact-service",
@@ -26,9 +26,9 @@
       "port": 3032,
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/contact-service",
       "id": "35107095-c417-44f9-9fa9-29cdf839b9bf",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:52.621Z",
-      "lastStarted": "2025-03-05T16:47:47.170Z"
+      "status": "running",
+      "lastStopped": "2025-03-15T01:23:36.534Z",
+      "lastStarted": "2025-03-19T15:10:50.353Z"
     },
     {
       "name": "dispatch-service",
@@ -37,8 +37,8 @@
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/dispatch-service",
       "id": "45107095-d417-44f9-9fa9-29cdf839b9c0",
       "status": "stopped",
-      "lastStopped": "2025-02-26T23:11:53.146Z",
-      "lastStarted": "2025-02-26T23:02:40.205Z"
+      "lastStopped": "2025-03-15T01:21:07.558Z",
+      "lastStarted": "2025-03-12T19:03:35.745Z"
     },
     {
       "name": "event-service",
@@ -46,9 +46,9 @@
       "port": 3030,
       "path": "../seco-logistics/services/event-service",
       "id": "55107095-e417-44f9-9fa9-29cdf839b9c1",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:52.732Z",
-      "lastStarted": "2025-03-05T16:46:41.734Z"
+      "status": "running",
+      "lastStopped": "2025-03-15T01:21:07.008Z",
+      "lastStarted": "2025-03-19T15:10:54.626Z"
     },
     {
       "name": "rate-service",
@@ -56,9 +56,9 @@
       "port": 3031,
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/rate-service",
       "id": "65107095-f417-44f9-9fa9-29cdf839b9c2",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:52.837Z",
-      "lastStarted": "2025-03-05T16:46:46.271Z"
+      "status": "running",
+      "lastStopped": "2025-03-15T01:35:45.220Z",
+      "lastStarted": "2025-03-19T15:10:59.966Z"
     },
     {
       "name": "carrier-service",
@@ -66,9 +66,9 @@
       "port": 3027,
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/carrier-service",
       "id": "75107095-g417-44f9-9fa9-29cdf839b9c3",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:52.935Z",
-      "lastStarted": "2025-03-05T16:46:50.611Z"
+      "status": "running",
+      "lastStopped": "2025-03-15T01:35:47.836Z",
+      "lastStarted": "2025-03-19T15:11:04.208Z"
     },
     {
       "name": "shipper-service",
@@ -76,9 +76,9 @@
       "port": 3029,
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/shipper-service",
       "id": "85107095-h417-44f9-9fa9-29cdf839b9c4",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:53.039Z",
-      "lastStarted": "2025-03-05T16:46:53.928Z"
+      "status": "running",
+      "lastStopped": "2025-03-15T01:35:47.091Z",
+      "lastStarted": "2025-03-19T15:11:08.450Z"
     },
     {
       "name": "router-service",
@@ -87,7 +87,8 @@
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/router-service",
       "id": "a5107095-j417-44f9-9fa9-29cdf839b9c6",
       "status": "stopped",
-      "lastStopped": "2025-02-25T22:13:34.736Z"
+      "lastStopped": "2025-03-15T01:35:46.392Z",
+      "lastStarted": "2025-03-13T16:16:36.169Z"
     },
     {
       "name": "receiver-service",
@@ -96,7 +97,8 @@
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/receiver-service",
       "id": "b5107095-k417-44f9-9fa9-29cdf839b9c7",
       "status": "stopped",
-      "lastStopped": "2025-02-25T22:13:34.736Z"
+      "lastStopped": "2025-03-13T16:21:52.307Z",
+      "lastStarted": "2025-03-13T16:20:05.787Z"
     },
     {
       "name": "orchestrator-service",
@@ -105,7 +107,8 @@
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/orchestrator-service",
       "id": "c5107095-l417-44f9-9fa9-29cdf839b9c8",
       "status": "stopped",
-      "lastStopped": "2025-02-25T22:13:34.736Z"
+      "lastStopped": "2025-03-15T01:35:48.812Z",
+      "lastStarted": "2025-03-12T19:03:40.119Z"
     },
     {
       "name": "notification-service",
@@ -113,9 +116,9 @@
       "port": 3035,
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/notification-service",
       "id": "d5107095-m417-44f9-9fa9-29cdf839b9c9",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:53.141Z",
-      "lastStarted": "2025-03-05T16:46:57.237Z"
+      "status": "running",
+      "lastStopped": "2025-03-15T01:35:49.408Z",
+      "lastStarted": "2025-03-19T15:11:12.683Z"
     },
     {
       "name": "load-service",
@@ -123,9 +126,9 @@
       "port": 3026,
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/load-service",
       "id": "e5107095-n417-44f9-9fa9-29cdf839b9ca",
-      "status": "stopped",
-      "lastStopped": "2025-03-05T16:47:53.235Z",
-      "lastStarted": "2025-03-05T16:47:01.632Z"
+      "status": "running",
+      "lastStopped": "2025-03-15T01:35:53.611Z",
+      "lastStarted": "2025-03-19T15:11:16.920Z"
     },
     {
       "name": "dispatcher-service",
@@ -134,7 +137,8 @@
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/dispatcher-service",
       "id": "f5107095-o417-44f9-9fa9-29cdf839b9cb",
       "status": "stopped",
-      "lastStopped": "2025-02-25T22:13:34.736Z"
+      "lastStopped": "2025-03-15T01:35:52.215Z",
+      "lastStarted": "2025-03-13T16:18:23.267Z"
     },
     {
       "name": "configurator-service",
@@ -143,7 +147,8 @@
       "path": "/Users/gabi/Documents/repos/seco-logistics/services/configurator-service",
       "id": "g5107095-p417-44f9-9fa9-29cdf839b9cc",
       "status": "stopped",
-      "lastStopped": "2025-03-05T15:37:43.948Z"
+      "lastStopped": "2025-03-15T01:35:50.656Z",
+      "lastStarted": "2025-03-13T16:17:07.649Z"
     }
   ],
   "groups": [
