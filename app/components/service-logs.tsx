@@ -75,8 +75,6 @@ export default function ServiceLogs({
         return "bg-green-500";
       case "stopped":
         return "bg-red-500";
-      case "error":
-        return "bg-red-500";
       default:
         return "bg-gray-500";
     }

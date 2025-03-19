@@ -1,3 +1,4 @@
+import { checkServiceStatus } from "~/models/service.server";
 import { prisma } from "./db.server";
 import type { MicroService } from "./types";
 import { exec } from "child_process";
@@ -33,11 +34,10 @@ export async function getServiceById(id: string) {
     },
   });
 
-  if (!service) {
-    throw new Error(`Service with id ${id} not found`);
-  }
+  if (!service) return null;
 
-  return service;
+  const status = await checkServiceStatus(service as MicroService);
+  return { ...service, status };
 }
 
 export async function getAllServices() {
@@ -53,19 +53,19 @@ export async function getAllServices() {
         name: true,
         services: {
           select: {
-            id: true
-          }
-        }
-      }
+            id: true,
+          },
+        },
+      },
     }),
   ]);
 
   return {
     services,
-    groups: groups.map(group => ({
+    groups: groups.map((group) => ({
       ...group,
-      services: group.services.map(service => service.id)
-    }))
+      services: group.services.map((service) => service.id),
+    })),
   };
 }
 

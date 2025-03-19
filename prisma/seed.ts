@@ -1,18 +1,14 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Service } from '@prisma/client';
 import { readFileSync, existsSync, renameSync } from 'fs';
 import { join } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const prisma = new PrismaClient();
 
-async function startService(service: any) {
+async function startService(service: Service) {
   try {
     await execAsync(`cd ${service.path} && yarn start`);
     return true;

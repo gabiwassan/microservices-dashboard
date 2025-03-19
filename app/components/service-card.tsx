@@ -3,6 +3,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import { MicroService, ServiceStatus } from "../utils/types";
 import ServiceStatusBadge from "./service-status-badge";
 import ServiceLogs from "./service-logs";
+import ConfirmationModal from "./confirmation-modal";
 
 const ReactConfetti = lazy(() => import("react-confetti"));
 
@@ -26,6 +27,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     height: 0,
   });
   const [isBrowser, setIsBrowser] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     setIsBrowser(true);
@@ -98,7 +100,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     };
   }, [isProcessing, revalidator]);
 
-  const handleAction = (action: "start" | "stop" | "refresh" | "logs") => {
+  const handleAction = (action: "start" | "stop" | "refresh" | "logs" | "delete") => {
     if (action === "refresh") {
       revalidator.revalidate();
       return;
@@ -106,6 +108,11 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
     if (action === "logs") {
       setShowLogs(!showLogs);
+      return;
+    }
+
+    if (action === "delete") {
+      setShowDeleteModal(true);
       return;
     }
 
@@ -340,6 +347,36 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             </svg>
             <span>Refresh</span>
           </button>
+
+          <button
+            onClick={() => handleAction("delete")}
+            disabled={isProcessing}
+            className="
+              w-28
+              inline-flex items-center justify-center gap-1.5 px-3 py-1.5 
+              text-xs font-medium rounded-lg border whitespace-nowrap
+              bg-red-50 text-red-600 border-red-100 
+              hover:bg-red-100 
+              dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 
+              dark:hover:bg-red-500/30
+              transition-all duration-200
+              disabled:opacity-50 disabled:cursor-not-allowed
+            "
+          >
+            <svg
+              className="w-3.5 h-3.5 shrink-0"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>Delete</span>
+          </button>
         </div>
       </div>
 
@@ -348,7 +385,22 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         serviceName={service.name}
         isVisible={showLogs}
         onClose={() => setShowLogs(false)}
-        status={service.status}
+        status={service.status as ServiceStatus}
+      />
+
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={() => {
+          const formData = new FormData();
+          formData.append("action", "delete");
+          formData.append("serviceId", service.id);
+          submit(formData, { method: "post" });
+        }}
+        title="Delete Service"
+        message={`Are you sure you want to delete ${service.name}? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
       />
     </div>
   );

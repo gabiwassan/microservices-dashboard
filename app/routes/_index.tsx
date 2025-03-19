@@ -14,8 +14,10 @@ import path from "path";
 import { useState, useEffect, Suspense } from "react";
 import ReactConfetti from "react-confetti";
 import { useWindowSize } from "~/utils/hooks";
+import { PrismaClient } from "@prisma/client";
 
 const SERVICES_CONFIG_PATH = path.join(process.cwd(), "services.json");
+const prisma = new PrismaClient();
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { services, groups } = await getAllServices();
@@ -36,6 +38,11 @@ export const action: ActionFunction = async ({
   } else if (action === "stop") {
     const serviceId = formData.get("serviceId") as string;
     await stopServiceById(serviceId);
+  } else if (action === "delete") {
+    const serviceId = formData.get("serviceId") as string;
+    await prisma.service.delete({
+      where: { id: serviceId }
+    });
   } else if (action === "startGroup") {
     const groupId = formData.get("groupId") as string;
     const { groups } = await getAllServices();
