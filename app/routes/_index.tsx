@@ -11,12 +11,17 @@ import { ActionData, MicroService, ServiceGroup } from "~/utils/types";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import path from "path";
+import { useState, useEffect, Suspense } from "react";
+import ReactConfetti from "react-confetti";
+import { useWindowSize } from "~/utils/hooks";
 
 const SERVICES_CONFIG_PATH = path.join(process.cwd(), "services.json");
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
   const { services, groups } = await getAllServices();
-  return { services, groups };
+  const url = new URL(request.url);
+  const showConfetti = url.searchParams.get("newService") === "true";
+  return { services, groups, showConfetti };
 };
 
 export const action: ActionFunction = async ({
@@ -121,14 +126,42 @@ export const action: ActionFunction = async ({
 };
 
 export default function Index() {
-  const { services, groups } = useLoaderData<{
+  const { services, groups, showConfetti: initialShowConfetti } = useLoaderData<{
     services: MicroService[];
     groups: ServiceGroup[];
+    showConfetti: boolean;
   }>();
   const submit = useSubmit();
+  const [showConfetti, setShowConfetti] = useState(false);
+  const windowSize = useWindowSize();
+  const isBrowser = typeof window !== "undefined";
+
+  useEffect(() => {
+    if (initialShowConfetti) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 5000);
+    }
+  }, [initialShowConfetti]);
+
+  const ConfettiEffect = () => {
+    if (!isBrowser || !showConfetti) return null;
+
+    return (
+      <Suspense fallback={null}>
+        <ReactConfetti
+          width={windowSize.width}
+          height={windowSize.height}
+          recycle={false}
+          numberOfPieces={2000}
+          gravity={0.2}
+        />
+      </Suspense>
+    );
+  };
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6">
+      <ConfettiEffect />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
