@@ -66,17 +66,12 @@ export async function checkServiceStatus(
   service: MicroService,
 ): Promise<ServiceStatus> {
   return new Promise(resolve => {
-    exec(`lsof -i:${service.port}`, (error, stdout) => {
-      if (error) {
+    exec(`lsof -i:${service.port} -P -n`, (error, stdout) => {
+      if (error || !stdout.trim()) {
         resolve('stopped');
         return;
       }
-
-      if (stdout.includes('node')) {
-        resolve('running');
-      } else {
-        resolve('stopped');
-      }
+      resolve('running');
     });
   });
 }

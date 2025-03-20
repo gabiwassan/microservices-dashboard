@@ -1,8 +1,6 @@
 import type { Service, Group } from '@prisma/client';
 
 export interface MicroService extends Service {
-  lastStarted?: Date | null;
-  lastStopped?: Date | null;
   status: ServiceStatus;
 }
 

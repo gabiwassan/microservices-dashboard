@@ -1,4 +1,4 @@
-import { checkServiceStatus } from '~/models/service.server';
+import { checkServiceStatus, cleanupPort } from '~/models/service.server';
 import { prisma } from './db.server';
 import type { MicroService } from './types';
 import { exec } from 'child_process';
@@ -8,21 +8,27 @@ const execAsync = promisify(exec);
 
 async function isPortInUse(port: number): Promise<boolean> {
   try {
-    await execAsync(`lsof -i:${port} -P -n | grep LISTEN`);
-    return true;
+    // Usamos un comando más genérico para verificar cualquier proceso que esté usando el puerto
+    const { stdout } = await execAsync(`lsof -i:${port} -P -n`);
+    return stdout.trim().length > 0;
   } catch (error) {
     return false;
   }
 }
 
-async function waitForPort(port: number, timeout = 5000): Promise<boolean> {
+async function waitForPort(port: number, timeout = 15000): Promise<boolean> {
   const startTime = Date.now();
+  console.log(`Waiting for port ${port} to be available...`);
+  
   while (Date.now() - startTime < timeout) {
     if (await isPortInUse(port)) {
+      console.log(`Port ${port} is now in use`);
       return true;
     }
     await new Promise(resolve => setTimeout(resolve, 500));
   }
+  
+  console.log(`Timeout waiting for port ${port} to become available`);
   return false;
 }
 
@@ -103,29 +109,28 @@ export async function startServiceById(id: string) {
     where: { id },
   });
 
+  console.log(`The service: ${service?.name} is starting`);
+
   if (!service) {
     throw new Error(`Service with id ${id} not found`);
   }
 
   try {
-    // Check if service is already running
-    if (await isPortInUse(service.port)) {
-      console.log(
-        `Service ${service.name} is already running on port ${service.port}`,
-      );
-      return prisma.service.update({
-        where: { id },
-        data: {
-          status: 'running',
-        },
-      });
-    }
+    // Asegurarnos de que el servicio no esté ejecutándose
+    await stopServiceById(id);
+    
+    console.log(`Starting service ${service.name} on port ${service.port}`);
 
-    // Start service in background
-    await execAsync(`cd ${service.path} && yarn start > /dev/null 2>&1 &`);
+    // Asegurarnos de que el puerto esté libre antes de iniciar
+    await cleanupPort(service.port);
+
+    // Start service in background with a more robust command
+    await execAsync(`cd ${service.path} && (nohup yarn start > ./logs/service.log 2>&1 &)`);
 
     // Wait for the service to start (check if port becomes available)
     const isRunning = await waitForPort(service.port);
+
+    console.log(`The service: ${service.name} is running:`, isRunning);
 
     if (!isRunning) {
       throw new Error(`Service ${service.name} failed to start within timeout`);
@@ -135,10 +140,20 @@ export async function startServiceById(id: string) {
       where: { id },
       data: {
         status: 'running',
+        lastStarted: new Date(),
       },
     });
   } catch (error) {
     console.error(`Error starting service ${service.name}:`, error);
+    
+    // En caso de error, asegurarnos de actualizar el estado a stopped
+    await prisma.service.update({
+      where: { id },
+      data: {
+        status: 'stopped',
+      },
+    });
+    
     throw error;
   }
 }
@@ -153,18 +168,57 @@ export async function stopServiceById(id: string) {
   }
 
   try {
-    // This is a simplified way to stop the service. You might want to implement
-    // a more robust solution based on your specific needs
+    console.log(`Stopping service: ${service.name} on port ${service.port}`);
+    
+    // Verificar si el servicio realmente está en ejecución
+    if (!(await isPortInUse(service.port))) {
+      console.log(`Service ${service.name} is not running on port ${service.port}`);
+      
+      // Actualizar el estado en la base de datos aunque el servicio no esté ejecutándose
+      return prisma.service.update({
+        where: { id },
+        data: {
+          status: 'stopped',
+          lastStopped: new Date(),
+        },
+      });
+    }
+    
+    // Matar cualquier proceso que esté usando el puerto
     await execAsync(`lsof -ti:${service.port} | xargs kill -9`);
+    
+    // Esperar un momento para asegurarnos de que el proceso ha terminado
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Usar cleanupPort para asegurarnos de que el puerto esté realmente libre
+    await cleanupPort(service.port);
+    
+    // Verificar que el puerto esté realmente libre
+    if (await isPortInUse(service.port)) {
+      console.warn(`Warning: Port ${service.port} is still in use after stopping service`);
+    } else {
+      console.log(`Service ${service.name} stopped successfully`);
+    }
 
     return prisma.service.update({
       where: { id },
       data: {
         status: 'stopped',
+        lastStopped: new Date(),
       },
     });
   } catch (error) {
     console.error(`Error stopping service ${service.name}:`, error);
+    
+    // Intentamos actualizar el estado de todos modos
+    await prisma.service.update({
+      where: { id },
+      data: {
+        status: 'stopped',
+        lastStopped: new Date(),
+      },
+    });
+    
     throw error;
   }
 }

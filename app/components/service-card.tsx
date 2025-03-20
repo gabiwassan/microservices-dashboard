@@ -377,7 +377,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                 clipRule="evenodd"
               />
             </svg>
-            <span>Delete</span>
           </button>
         </div>
       </div>
